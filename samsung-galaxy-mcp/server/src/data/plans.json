@@ -1,0 +1,367 @@
+{
+  "service_name": "New Galaxy Club",
+  "service_id": "SVC-NGC-001",
+  "tagline": "Always have the latest Galaxy",
+  "description": "New Galaxy Club is Samsung's premium device subscription service that lets you upgrade to the newest Galaxy devices regularly while enjoying premium benefits and protection.",
+  "service_status": "active",
+  "launch_date": "2024-06-01",
+  "available_regions": ["US", "KR", "UK", "DE", "JP", "SG"],
+  "plans": [
+    {
+      "id": "ngc-basic",
+      "name": "Basic Plan",
+      "tier": 1,
+      "monthly_price": 35,
+      "annual_price": 378,
+      "currency": "USD",
+      "upgrade_cycle_months": 24,
+      "included_devices": [
+        "Galaxy S Series (S25, S25+)",
+        "Galaxy A Series (A55, A35)",
+        "Galaxy Tab S Series (Tab S10, Tab S10+)"
+      ],
+      "excluded_devices": [
+        "Galaxy S Ultra models",
+        "Galaxy Z Fold/Flip series",
+        "Galaxy Book series",
+        "Galaxy Watch Ultra"
+      ],
+      "benefits": [
+        "Device upgrade every 24 months",
+        "Samsung Care+ Basic included ($11.99/mo value)",
+        "Priority customer support",
+        "Free standard shipping on all orders",
+        "Exclusive member-only offers",
+        "Galaxy AI features included"
+      ],
+      "not_included": [
+        "Ultra/Premium devices",
+        "Foldable devices",
+        "24/7 support",
+        "Express shipping",
+        "Accessory bundles"
+      ],
+      "terms": {
+        "minimum_commitment_months": 12,
+        "early_termination_fee": 150,
+        "device_return_required": true,
+        "damage_fee_max": 250,
+        "late_payment_fee": 15,
+        "device_buyout_eligible_after_months": 12,
+        "buyout_residual_percentage": 40
+      },
+      "subscriber_count": 48230,
+      "status": "active"
+    },
+    {
+      "id": "ngc-premium",
+      "name": "Premium Plan",
+      "tier": 2,
+      "monthly_price": 55,
+      "annual_price": 594,
+      "currency": "USD",
+      "upgrade_cycle_months": 12,
+      "included_devices": [
+        "Galaxy S Ultra Series (S25 Ultra)",
+        "Galaxy Z Fold Series (Z Fold6)",
+        "Galaxy Z Flip Series (Z Flip6)",
+        "Galaxy Tab S Ultra Series (Tab S10 Ultra)",
+        "Galaxy Watch Ultra",
+        "All Basic Plan devices"
+      ],
+      "excluded_devices": [
+        "Galaxy Book series (separate subscription)"
+      ],
+      "benefits": [
+        "Device upgrade every 12 months",
+        "Samsung Care+ Premium included ($17.99/mo value)",
+        "24/7 Priority support with dedicated line",
+        "Free express shipping on all orders",
+        "Exclusive member-only offers",
+        "Free accessory bundle with each upgrade ($100 value)",
+        "Galaxy ecosystem perks (SmartThings premium, Samsung Health+)",
+        "Early access to new device launches",
+        "Galaxy AI Premium features included",
+        "Free Galaxy Buds upgrade every 2 years"
+      ],
+      "not_included": [],
+      "terms": {
+        "minimum_commitment_months": 12,
+        "early_termination_fee": 200,
+        "device_return_required": true,
+        "damage_fee_max": 350,
+        "late_payment_fee": 20,
+        "device_buyout_eligible_after_months": 12,
+        "buyout_residual_percentage": 35
+      },
+      "subscriber_count": 31450,
+      "status": "active"
+    },
+    {
+      "id": "ngc-family",
+      "name": "Family Plan",
+      "tier": 3,
+      "monthly_price": 89,
+      "annual_price": 961,
+      "currency": "USD",
+      "upgrade_cycle_months": 12,
+      "included_devices": [
+        "All Premium Plan devices",
+        "Up to 4 lines/devices",
+        "Mix and match any eligible devices"
+      ],
+      "excluded_devices": [],
+      "benefits": [
+        "All Premium Plan benefits",
+        "Up to 4 family members",
+        "Shared upgrade pool",
+        "Family locator features",
+        "Parental controls included",
+        "25% savings vs individual Premium plans",
+        "Shared Samsung Cloud storage (200GB)",
+        "Family Samsung Health dashboard"
+      ],
+      "not_included": [],
+      "terms": {
+        "minimum_commitment_months": 12,
+        "early_termination_fee": 300,
+        "device_return_required": true,
+        "damage_fee_max": 350,
+        "late_payment_fee": 25,
+        "max_lines": 4,
+        "additional_line_fee": 15,
+        "device_buyout_eligible_after_months": 12,
+        "buyout_residual_percentage": 35
+      },
+      "subscriber_count": 12780,
+      "status": "active"
+    }
+  ],
+  "faq": [
+    {
+      "id": "faq-001",
+      "category": "general",
+      "question": "Can I keep my current phone number?",
+      "answer": "Yes! Galaxy Club is a device subscription service, not a carrier. You keep your existing phone number and carrier plan."
+    },
+    {
+      "id": "faq-002",
+      "category": "upgrade",
+      "question": "What happens to my old device when I upgrade?",
+      "answer": "Simply return your old device when you receive your new one. We provide a prepaid shipping label and handle all recycling responsibly."
+    },
+    {
+      "id": "faq-003",
+      "category": "billing",
+      "question": "Can I cancel anytime?",
+      "answer": "You can cancel after the minimum commitment period (12 months). Early cancellation incurs a fee. You must return the device in good condition."
+    },
+    {
+      "id": "faq-004",
+      "category": "protection",
+      "question": "What if I damage my device?",
+      "answer": "Samsung Care+ is included! Minor repairs are covered. For major damage, there's a maximum fee based on your plan tier."
+    },
+    {
+      "id": "faq-005",
+      "category": "ownership",
+      "question": "Can I buy out my device and keep it?",
+      "answer": "Yes! After 12 months, you can purchase your device at a reduced price based on remaining value. Contact support for buyout pricing."
+    },
+    {
+      "id": "faq-006",
+      "category": "accessories",
+      "question": "Are accessories included?",
+      "answer": "Premium and Family plans include a free accessory bundle ($100 value) with each upgrade. Basic plan members get exclusive discounts."
+    },
+    {
+      "id": "faq-007",
+      "category": "upgrade",
+      "question": "Can I upgrade before my cycle ends?",
+      "answer": "Yes, early upgrades are available with a prorated fee. Premium and Family plan members can upgrade after 6 months at a reduced early upgrade fee."
+    },
+    {
+      "id": "faq-008",
+      "category": "general",
+      "question": "Galaxy Club과 일반 구매의 차이는?",
+      "answer": "일반 구매는 기기를 소유하지만 Galaxy Club은 월정액으로 항상 최신 기기를 사용할 수 있습니다. Care+ 포함, 액세서리 번들, 업그레이드 비용 절감 등의 혜택이 있습니다."
+    },
+    {
+      "id": "faq-009",
+      "category": "trade_in",
+      "question": "기존 기기를 Trade-in하면 Galaxy Club이 더 저렴해지나요?",
+      "answer": "Galaxy Club은 기기 반납형이라 별도 Trade-in과는 다릅니다. 하지만 현재 기기의 Trade-in 크레딧을 가입비나 액세서리 구매에 적용할 수 있습니다."
+    },
+    {
+      "id": "faq-010",
+      "category": "billing",
+      "question": "결제 방법은 어떻게 되나요?",
+      "answer": "신용카드, 체크카드, Samsung Pay 등 다양한 결제 수단을 지원합니다. 매월 자동 결제되며, 결제일은 가입일 기준입니다."
+    }
+  ],
+  "enrollment_steps": [
+    {
+      "step": 1,
+      "title": "Choose your plan",
+      "description": "Choose your plan (Basic, Premium, or Family)",
+      "estimated_time_minutes": 3
+    },
+    {
+      "step": 2,
+      "title": "Select your device",
+      "description": "Select your first device from the eligible lineup",
+      "estimated_time_minutes": 5
+    },
+    {
+      "step": 3,
+      "title": "Credit check",
+      "description": "Complete credit check (soft pull, no impact to credit score)",
+      "estimated_time_minutes": 2
+    },
+    {
+      "step": 4,
+      "title": "Confirm & pay",
+      "description": "Review order and set up monthly payment",
+      "estimated_time_minutes": 3
+    },
+    {
+      "step": 5,
+      "title": "Receive device",
+      "description": "Receive your device in 2-3 business days with full protection!",
+      "estimated_time_minutes": null
+    }
+  ],
+  "cost_comparison": [
+    {
+      "id": "comp-001",
+      "device": "Galaxy S25 Ultra 256GB",
+      "device_id": "DEV-SM-S926B",
+      "retail_price": 1299,
+      "plan_id": "ngc-premium",
+      "monthly_cost": 55,
+      "total_12mo": 660,
+      "upgrade_savings": 639,
+      "care_plus_value_included": 215,
+      "total_value_saved": 854
+    },
+    {
+      "id": "comp-002",
+      "device": "Galaxy S25+ 256GB",
+      "device_id": "DEV-SM-S925B",
+      "retail_price": 999,
+      "plan_id": "ngc-basic",
+      "monthly_cost": 35,
+      "total_12mo": 420,
+      "upgrade_savings": 579,
+      "care_plus_value_included": 144,
+      "total_value_saved": 723
+    },
+    {
+      "id": "comp-003",
+      "device": "Galaxy Z Fold6 256GB",
+      "device_id": "DEV-SM-F956B",
+      "retail_price": 1899,
+      "plan_id": "ngc-premium",
+      "monthly_cost": 55,
+      "total_12mo": 660,
+      "upgrade_savings": 1239,
+      "care_plus_value_included": 215,
+      "total_value_saved": 1454
+    },
+    {
+      "id": "comp-004",
+      "device": "Galaxy Z Flip6 256GB",
+      "device_id": "DEV-SM-F741B",
+      "retail_price": 1099,
+      "plan_id": "ngc-premium",
+      "monthly_cost": 55,
+      "total_12mo": 660,
+      "upgrade_savings": 439,
+      "care_plus_value_included": 215,
+      "total_value_saved": 654
+    },
+    {
+      "id": "comp-005",
+      "device": "Galaxy S25 Ultra 256GB (vs 일반 구매 + Trade-in)",
+      "device_id": "DEV-SM-S926B",
+      "retail_price": 1299,
+      "trade_in_device": "Galaxy S23 Ultra 256GB",
+      "trade_in_value": 450,
+      "net_purchase_price": 849,
+      "plan_id": "ngc-premium",
+      "monthly_cost": 55,
+      "total_12mo": 660,
+      "upgrade_savings": 189,
+      "care_plus_value_included": 215,
+      "total_value_saved": 404,
+      "note": "Galaxy Club은 기기 반납형이라 별도 Trade-in이 필요 없습니다"
+    },
+    {
+      "id": "comp-006",
+      "device": "Galaxy Tab S10 Ultra 256GB",
+      "device_id": "DEV-SM-X926B",
+      "retail_price": 1199,
+      "plan_id": "ngc-premium",
+      "monthly_cost": 55,
+      "total_12mo": 660,
+      "upgrade_savings": 539,
+      "care_plus_value_included": 215,
+      "total_value_saved": 754
+    },
+    {
+      "id": "comp-007",
+      "device": "Galaxy S25 128GB",
+      "device_id": "DEV-SM-S924B",
+      "retail_price": 799,
+      "plan_id": "ngc-basic",
+      "monthly_cost": 35,
+      "total_24mo": 840,
+      "upgrade_savings": -41,
+      "care_plus_value_included": 288,
+      "total_value_saved": 247,
+      "note": "Basic 플랜은 24개월 주기로, 순수 기기 비용은 비슷하지만 Care+ 포함 가치를 고려하면 여전히 절약됩니다"
+    }
+  ],
+  "lifecycle": {
+    "stages": [
+      { "month": "0", "label": "가입 신청", "description": "플랜 선택, 크레딧 체크, 결제 설정" },
+      { "month": "1", "label": "기기 수령", "description": "새 Galaxy 기기 수령, Care+ 자동 적용" },
+      { "month": "1-11", "label": "기기 사용", "description": "Care+ 보장, 멤버 혜택 이용, Galaxy AI 활용" },
+      { "month": "6", "label": "중간 점검", "description": "얼리 업그레이드 옵션 안내 (Premium/Family)" },
+      { "month": "12", "label": "업그레이드 선택", "description": "반납 후 최신 기기로 업그레이드, 바이아웃, 또는 연장" },
+      { "month": "13+", "label": "새 사이클", "description": "최신 기기로 새로운 12개월 시작" }
+    ]
+  },
+  "regional_pricing": {
+    "KR": {
+      "basic_monthly": 39900,
+      "premium_monthly": 62900,
+      "family_monthly": 99900,
+      "currency": "KRW"
+    },
+    "UK": {
+      "basic_monthly": 29,
+      "premium_monthly": 45,
+      "family_monthly": 72,
+      "currency": "GBP"
+    },
+    "DE": {
+      "basic_monthly": 33,
+      "premium_monthly": 52,
+      "family_monthly": 84,
+      "currency": "EUR"
+    },
+    "JP": {
+      "basic_monthly": 4980,
+      "premium_monthly": 7980,
+      "family_monthly": 12980,
+      "currency": "JPY"
+    },
+    "SG": {
+      "basic_monthly": 48,
+      "premium_monthly": 75,
+      "family_monthly": 120,
+      "currency": "SGD"
+    }
+  }
+}

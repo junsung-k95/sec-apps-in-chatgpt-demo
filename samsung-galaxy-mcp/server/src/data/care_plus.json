@@ -1,0 +1,280 @@
+{
+  "service_name": "Samsung Care+",
+  "service_id": "SVC-CARE-001",
+  "description": "삼성 공식 기기 보험 서비스. 수리, 교환, 파손 보장.",
+  "description_en": "Samsung's official device protection service. Covers repairs, replacements, and accidental damage.",
+  "service_status": "active",
+  "launch_date": "2020-03-01",
+  "available_regions": ["US", "KR", "UK", "DE", "JP", "SG"],
+  "total_active_subscribers": 2840000,
+  "plans": [
+    {
+      "id": "care-basic",
+      "name": "Care+ Basic",
+      "tier": 1,
+      "monthly_price": 11.99,
+      "annual_price": 129,
+      "coverage": [
+        "우발적 파손 수리 (연 2회)",
+        "기계적 고장 수리",
+        "배터리 교체 (용량 80% 이하 시)",
+        "소프트웨어 문제 원격 지원",
+        "삼성 공인 부품만 사용"
+      ],
+      "coverage_en": [
+        "Accidental damage repair (2 claims per year)",
+        "Mechanical breakdown repair",
+        "Battery replacement (below 80% capacity)",
+        "Remote software troubleshooting",
+        "Samsung-certified parts only"
+      ],
+      "deductible": {
+        "screen_repair": 29,
+        "back_glass_repair": 29,
+        "other_repair": 99,
+        "battery_replacement": 0
+      },
+      "coverage_limit_per_claim": 1000,
+      "coverage_limit_annual": 2500,
+      "eligible_devices": ["Galaxy S series", "Galaxy A series", "Galaxy Tab series", "Galaxy Watch series", "Galaxy Buds series"],
+      "excluded_devices": ["Galaxy Z Fold series", "Galaxy Z Flip series"],
+      "response_time": {
+        "mail_in_days": 5,
+        "walk_in_hours": 2,
+        "remote_support_minutes": 15
+      },
+      "status": "active"
+    },
+    {
+      "id": "care-premium",
+      "name": "Care+ Premium",
+      "tier": 2,
+      "monthly_price": 17.99,
+      "annual_price": 199,
+      "coverage": [
+        "Care+ Basic 전체 보장",
+        "분실/도난 보장 (연 2회)",
+        "즉시 교체 서비스 (익일 배송)",
+        "24/7 전용 상담 라인",
+        "화면 수리 자기부담금 $0",
+        "폴더블 기기 힌지 수리 포함",
+        "해외 서비스 (Samsung 서비스 센터 소재국)"
+      ],
+      "coverage_en": [
+        "All Care+ Basic coverage",
+        "Lost/stolen device replacement (2 claims per year)",
+        "Instant replacement service (next-day delivery)",
+        "24/7 dedicated support line",
+        "$0 deductible for screen repairs",
+        "Foldable device hinge repair included",
+        "International service (countries with Samsung Service Centers)"
+      ],
+      "deductible": {
+        "screen_repair": 0,
+        "back_glass_repair": 0,
+        "other_repair": 49,
+        "replacement": 149,
+        "lost_stolen_replacement": 249,
+        "battery_replacement": 0,
+        "hinge_repair": 0
+      },
+      "coverage_limit_per_claim": 2000,
+      "coverage_limit_annual": 5000,
+      "eligible_devices": ["All Galaxy devices"],
+      "excluded_devices": [],
+      "response_time": {
+        "replacement_hours": 24,
+        "mail_in_days": 3,
+        "walk_in_hours": 1,
+        "remote_support_minutes": 5
+      },
+      "status": "active"
+    }
+  ],
+  "enrollment_rules": {
+    "standard_window_days": 60,
+    "late_enrollment": {
+      "enabled": true,
+      "max_days_after_purchase": 365,
+      "required_condition": "good",
+      "late_enrollment_fee": 49,
+      "description": "구매 후 60일~1년 이내 기기의 경우, Vision 기반 컨디션 검사 통과 시 가입 가능",
+      "description_en": "Devices purchased 60 days to 1 year ago can enroll after passing a Vision-based condition check",
+      "condition_requirements": {
+        "screen_condition": ["no_scratches", "light_scratches"],
+        "body_condition": ["pristine", "minor_wear"],
+        "camera_condition": ["clear", "minor_smudge"]
+      },
+      "vision_check_process": [
+        "사용자가 기기의 앞면/뒷면 사진을 업로드",
+        "AI Vision이 화면, 바디, 카메라 상태를 자동 분석",
+        "각 항목이 good 이상이면 즉시 가입 승인",
+        "fair 이하 항목이 있으면 서비스 센터 방문 검사 권장"
+      ],
+      "vision_check_process_en": [
+        "User uploads front and back photos of device",
+        "AI Vision automatically analyzes screen, body, and camera condition",
+        "If all items are 'good' or above, enrollment is instantly approved",
+        "If any item is 'fair' or below, in-person service center inspection recommended"
+      ]
+    }
+  },
+  "claim_process": {
+    "steps": [
+      {
+        "step": 1,
+        "title": "클레임 접수",
+        "title_en": "File a claim",
+        "description": "Samsung Members 앱, 웹사이트, 또는 전화로 클레임 접수",
+        "channels": ["Samsung Members App", "samsung.com/care-plus", "1-800-SAMSUNG"]
+      },
+      {
+        "step": 2,
+        "title": "접수 확인",
+        "title_en": "Claim review",
+        "description": "접수 후 30분 이내 확인 이메일 발송. 추가 정보 필요 시 연락",
+        "estimated_time_minutes": 30
+      },
+      {
+        "step": 3,
+        "title": "수리/교체 진행",
+        "title_en": "Repair or replacement",
+        "description": "승인 후 택배 수거 (무료) 또는 서비스 센터 방문 안내",
+        "options": ["mail_in", "walk_in", "instant_replacement"]
+      },
+      {
+        "step": 4,
+        "title": "완료 및 수령",
+        "title_en": "Completion",
+        "description": "수리 완료 후 무료 배송. 교체의 경우 기존 기기 반납",
+        "estimated_days": 3
+      }
+    ],
+    "required_documents": [
+      "Samsung Account 로그인",
+      "기기 IMEI/시리얼 번호",
+      "파손/분실 상황 설명",
+      "분실/도난의 경우: 경찰 신고 접수증 (24시간 이내)"
+    ]
+  },
+  "service_centers": {
+    "total_global": 3200,
+    "by_region": {
+      "US": { "count": 420, "walk_in_available": true },
+      "KR": { "count": 180, "walk_in_available": true },
+      "UK": { "count": 85, "walk_in_available": true },
+      "DE": { "count": 120, "walk_in_available": true },
+      "JP": { "count": 95, "walk_in_available": true },
+      "SG": { "count": 25, "walk_in_available": true }
+    }
+  },
+  "pricing_by_device_category": {
+    "smartphone_flagship": {
+      "devices": ["Galaxy S25 Ultra", "Galaxy S25+", "Galaxy S24 Ultra", "Galaxy S24+"],
+      "basic_monthly": 11.99,
+      "premium_monthly": 17.99
+    },
+    "smartphone_standard": {
+      "devices": ["Galaxy S25", "Galaxy S24", "Galaxy A55", "Galaxy A35", "Galaxy A25"],
+      "basic_monthly": 8.99,
+      "premium_monthly": 13.99
+    },
+    "smartphone_foldable": {
+      "devices": ["Galaxy Z Fold6", "Galaxy Z Fold5", "Galaxy Z Flip6", "Galaxy Z Flip5"],
+      "basic_monthly": null,
+      "premium_monthly": 17.99,
+      "note": "Foldable devices require Premium plan"
+    },
+    "tablet": {
+      "devices": ["Galaxy Tab S10 Ultra", "Galaxy Tab S10+", "Galaxy Tab S10", "Galaxy Tab S9 Ultra", "Galaxy Tab S9+", "Galaxy Tab S9"],
+      "basic_monthly": 7.99,
+      "premium_monthly": 12.99
+    },
+    "watch": {
+      "devices": ["Galaxy Watch Ultra", "Galaxy Watch7", "Galaxy Watch7 Classic", "Galaxy Watch6 Classic", "Galaxy Watch6"],
+      "basic_monthly": 3.99,
+      "premium_monthly": 5.99
+    },
+    "earbuds": {
+      "devices": ["Galaxy Buds3 Pro", "Galaxy Buds3", "Galaxy Buds2 Pro", "Galaxy Buds FE"],
+      "basic_monthly": 2.99,
+      "premium_monthly": 4.99
+    },
+    "notebook": {
+      "devices": ["Galaxy Book4 Ultra", "Galaxy Book4 Pro", "Galaxy Book4 Pro 360", "Galaxy Book4 360", "Galaxy Book4", "Galaxy Book Go"],
+      "basic_monthly": 9.99,
+      "premium_monthly": 14.99
+    }
+  },
+  "faq": [
+    {
+      "id": "care-faq-001",
+      "category": "enrollment",
+      "question": "가입 후 언제부터 보장되나요?",
+      "answer": "가입 즉시 보장 시작됩니다. 단, 가입 후 30일 이내 클레임 시 추가 검증이 필요할 수 있습니다."
+    },
+    {
+      "id": "care-faq-002",
+      "category": "coverage",
+      "question": "해외에서도 서비스 받을 수 있나요?",
+      "answer": "Premium 플랜에 한하여 Samsung 공식 서비스 센터가 있는 국가에서 이용 가능합니다. 해외 서비스 시 자기부담금이 다를 수 있습니다."
+    },
+    {
+      "id": "care-faq-003",
+      "category": "billing",
+      "question": "가입 취소는 어떻게 하나요?",
+      "answer": "언제든 해지 가능하며, 잔여 기간에 대한 환불이 제공됩니다. Samsung Members 앱 또는 고객센터에서 해지할 수 있습니다."
+    },
+    {
+      "id": "care-faq-004",
+      "category": "plans",
+      "question": "Basic과 Premium의 차이가 뭔가요?",
+      "answer": "Premium은 분실/도난 보장, 즉시 교체 서비스, 화면 수리 자기부담금 $0, 폴더블 힌지 수리, 해외 서비스가 추가됩니다."
+    },
+    {
+      "id": "care-faq-005",
+      "category": "enrollment",
+      "question": "Late Enrollment이 뭔가요?",
+      "answer": "구매 후 60일이 지났더라도 1년 이내에 기기 상태가 양호하면 Vision 검사를 통해 가입할 수 있는 제도입니다. Late Enrollment 수수료($49)가 적용되며, 현재 프로모션 기간에는 면제될 수 있습니다."
+    },
+    {
+      "id": "care-faq-006",
+      "category": "claims",
+      "question": "클레임 횟수 제한이 있나요?",
+      "answer": "연간 최대 2회까지 클레임이 가능합니다. 분실/도난 보장도 별도 연 2회까지 가능합니다 (Premium 한정)."
+    },
+    {
+      "id": "care-faq-007",
+      "category": "coverage",
+      "question": "어떤 수리는 보장되지 않나요?",
+      "answer": "고의적 파손, 루팅/탈옥으로 인한 소프트웨어 문제, 비공인 수리 이력이 있는 기기, 자연재해로 인한 손상은 보장되지 않습니다."
+    },
+    {
+      "id": "care-faq-008",
+      "category": "claims",
+      "question": "교체 기기는 새 제품인가요?",
+      "answer": "교체 기기는 Samsung 공인 리퍼비시 또는 새 제품입니다. 동일 모델/색상이 재고가 없을 경우 동급 이상의 기기로 대체될 수 있습니다."
+    },
+    {
+      "id": "care-faq-009",
+      "category": "coverage",
+      "question": "Galaxy Club에 가입하면 Care+가 필요한가요?",
+      "answer": "Galaxy Club 모든 플랜에는 Care+가 포함되어 있습니다. Basic 플랜은 Care+ Basic, Premium/Family 플랜은 Care+ Premium이 자동 적용됩니다."
+    },
+    {
+      "id": "care-faq-010",
+      "category": "foldable",
+      "question": "폴더블 기기 힌지 문제도 보장되나요?",
+      "answer": "Care+ Premium에서 폴더블 기기 힌지 수리가 자기부담금 $0으로 보장됩니다. Basic 플랜에서는 폴더블 기기 가입이 불가합니다."
+    }
+  ],
+  "exclusions": [
+    "고의적 파손 또는 악의적 사용",
+    "비공인 서비스 센터에서의 수리 이력",
+    "루팅, 탈옥 등 소프트웨어 개조",
+    "자연재해 (홍수, 지진, 화재 등)",
+    "전쟁, 테러 등 불가항력",
+    "미용 목적의 수리 (기능에 영향 없는 스크래치 등)",
+    "분실/도난 보장은 Premium 플랜만 해당"
+  ]
+}

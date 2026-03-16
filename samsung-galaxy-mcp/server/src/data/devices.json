@@ -1,0 +1,1539 @@
+{
+  "devices": [
+    {
+      "device_id": "DEV-SM-S926B",
+      "model": "Galaxy S25 Ultra",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 25,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 680,
+        "512GB": 750,
+        "1TB": 820
+      },
+      "msrp": {
+        "256GB": 1299,
+        "512GB": 1419,
+        "1TB": 1659
+      },
+      "colors": ["Titanium Silverblue", "Titanium Gray", "Titanium Black", "Titanium Whitesilver"],
+      "release_year": 2025,
+      "release_date": "2025-01-22",
+      "end_of_support_date": "2032-01-22",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.9\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Snapdragon 8 Elite for Galaxy",
+        "ram": "12GB",
+        "battery": "5000mAh",
+        "camera": "200MP + 50MP + 10MP + 50MP",
+        "os": "One UI 7 / Android 15",
+        "water_resistance": "IP68",
+        "weight_g": 218,
+        "dimensions_mm": "162.8 x 77.6 x 8.2"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S925B",
+      "model": "Galaxy S25+",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 25,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 520,
+        "512GB": 580
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1119
+      },
+      "colors": ["Navy", "Icy Blue", "Mint", "Silver Shadow"],
+      "release_year": 2025,
+      "release_date": "2025-01-22",
+      "end_of_support_date": "2032-01-22",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.7\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Snapdragon 8 Elite for Galaxy",
+        "ram": "12GB",
+        "battery": "4900mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 7 / Android 15",
+        "water_resistance": "IP68",
+        "weight_g": 190,
+        "dimensions_mm": "158.4 x 75.8 x 7.3"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S924B",
+      "model": "Galaxy S25",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 25,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 400,
+        "256GB": 450
+      },
+      "msrp": {
+        "128GB": 799,
+        "256GB": 859
+      },
+      "colors": ["Navy", "Icy Blue", "Mint", "Silver Shadow"],
+      "release_year": 2025,
+      "release_date": "2025-01-22",
+      "end_of_support_date": "2032-01-22",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.2\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Snapdragon 8 Elite for Galaxy",
+        "ram": "12GB",
+        "battery": "4000mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 7 / Android 15",
+        "water_resistance": "IP68",
+        "weight_g": 162,
+        "dimensions_mm": "146.9 x 70.1 x 7.2"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S928B",
+      "model": "Galaxy S24 Ultra",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 24,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 550,
+        "512GB": 600,
+        "1TB": 650
+      },
+      "msrp": {
+        "256GB": 1299,
+        "512GB": 1419,
+        "1TB": 1659
+      },
+      "colors": ["Titanium Black", "Titanium Gray", "Titanium Violet", "Titanium Yellow"],
+      "release_year": 2024,
+      "release_date": "2024-01-17",
+      "end_of_support_date": "2031-01-17",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.8\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 3 for Galaxy",
+        "ram": "12GB",
+        "battery": "5000mAh",
+        "camera": "200MP + 12MP + 10MP + 50MP",
+        "os": "One UI 6.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 232,
+        "dimensions_mm": "162.3 x 79.0 x 8.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S926B-24",
+      "model": "Galaxy S24+",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 24,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 420,
+        "512GB": 470
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1119
+      },
+      "colors": ["Onyx Black", "Marble Gray", "Cobalt Violet", "Amber Yellow"],
+      "release_year": 2024,
+      "release_date": "2024-01-17",
+      "end_of_support_date": "2031-01-17",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.7\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Exynos 2400",
+        "ram": "12GB",
+        "battery": "4900mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 6.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 196,
+        "dimensions_mm": "158.5 x 75.9 x 7.7"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S921B",
+      "model": "Galaxy S24",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 24,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 320,
+        "256GB": 370
+      },
+      "msrp": {
+        "128GB": 799,
+        "256GB": 859
+      },
+      "colors": ["Onyx Black", "Marble Gray", "Cobalt Violet", "Amber Yellow"],
+      "release_year": 2024,
+      "release_date": "2024-01-17",
+      "end_of_support_date": "2031-01-17",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.2\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Exynos 2400",
+        "ram": "8GB",
+        "battery": "4000mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 6.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 167,
+        "dimensions_mm": "147.0 x 70.6 x 7.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S918B",
+      "model": "Galaxy S23 Ultra",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 23,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 450,
+        "512GB": 500,
+        "1TB": 550
+      },
+      "msrp": {
+        "256GB": 1199,
+        "512GB": 1299,
+        "1TB": 1539
+      },
+      "colors": ["Phantom Black", "Cream", "Green", "Lavender"],
+      "release_year": 2023,
+      "release_date": "2023-02-01",
+      "end_of_support_date": "2027-02-01",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.8\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "12GB",
+        "battery": "5000mAh",
+        "camera": "200MP + 12MP + 10MP + 10MP",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 234,
+        "dimensions_mm": "163.4 x 78.1 x 8.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S916B",
+      "model": "Galaxy S23+",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 23,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 320,
+        "512GB": 370
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1099
+      },
+      "colors": ["Phantom Black", "Cream", "Green", "Lavender"],
+      "release_year": 2023,
+      "release_date": "2023-02-01",
+      "end_of_support_date": "2027-02-01",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.6\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "8GB",
+        "battery": "4700mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 195,
+        "dimensions_mm": "157.8 x 76.2 x 7.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S911B",
+      "model": "Galaxy S23",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 23,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 250,
+        "256GB": 290
+      },
+      "msrp": {
+        "128GB": 799,
+        "256GB": 859
+      },
+      "colors": ["Phantom Black", "Cream", "Green", "Lavender"],
+      "release_year": 2023,
+      "release_date": "2023-02-01",
+      "end_of_support_date": "2027-02-01",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.1\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "8GB",
+        "battery": "3900mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 168,
+        "dimensions_mm": "146.3 x 70.9 x 7.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S908B",
+      "model": "Galaxy S22 Ultra",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 22,
+      "storage_options": ["128GB", "256GB", "512GB", "1TB"],
+      "base_values": {
+        "128GB": 300,
+        "256GB": 350,
+        "512GB": 400,
+        "1TB": 440
+      },
+      "msrp": {
+        "128GB": 1199,
+        "256GB": 1299,
+        "512GB": 1399,
+        "1TB": 1599
+      },
+      "colors": ["Phantom Black", "Phantom White", "Green", "Burgundy"],
+      "release_year": 2022,
+      "release_date": "2022-02-25",
+      "end_of_support_date": "2026-02-25",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.8\" Dynamic AMOLED 2X, QHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 1",
+        "ram": "12GB",
+        "battery": "5000mAh",
+        "camera": "108MP + 12MP + 10MP + 10MP",
+        "os": "One UI 4.1 / Android 12",
+        "water_resistance": "IP68",
+        "weight_g": 228,
+        "dimensions_mm": "163.3 x 77.9 x 8.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S906B",
+      "model": "Galaxy S22+",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 22,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 220,
+        "256GB": 260
+      },
+      "msrp": {
+        "128GB": 999,
+        "256GB": 1049
+      },
+      "colors": ["Phantom Black", "Phantom White", "Green", "Pink Gold"],
+      "release_year": 2022,
+      "release_date": "2022-02-25",
+      "end_of_support_date": "2026-02-25",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.6\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 1",
+        "ram": "8GB",
+        "battery": "4500mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 4.1 / Android 12",
+        "water_resistance": "IP68",
+        "weight_g": 196,
+        "dimensions_mm": "157.4 x 75.8 x 7.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-S901B",
+      "model": "Galaxy S22",
+      "series": "Galaxy S",
+      "category": "smartphone",
+      "generation": 22,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 170,
+        "256GB": 200
+      },
+      "msrp": {
+        "128GB": 799,
+        "256GB": 849
+      },
+      "colors": ["Phantom Black", "Phantom White", "Green", "Pink Gold"],
+      "release_year": 2022,
+      "release_date": "2022-02-25",
+      "end_of_support_date": "2026-02-25",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.1\" Dynamic AMOLED 2X, FHD+, 120Hz",
+        "processor": "Snapdragon 8 Gen 1",
+        "ram": "8GB",
+        "battery": "3700mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 4.1 / Android 12",
+        "water_resistance": "IP68",
+        "weight_g": 167,
+        "dimensions_mm": "146.0 x 70.6 x 7.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F956B",
+      "model": "Galaxy Z Fold6",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 6,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 780,
+        "512GB": 850,
+        "1TB": 920
+      },
+      "msrp": {
+        "256GB": 1899,
+        "512GB": 2019,
+        "1TB": 2259
+      },
+      "colors": ["Silver Shadow", "Navy", "Pink", "White"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2031-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "7.6\" Dynamic AMOLED 2X (Main) / 6.3\" (Cover), 120Hz",
+        "processor": "Snapdragon 8 Gen 3 for Galaxy",
+        "ram": "12GB",
+        "battery": "4400mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 6.1.1 / Android 14",
+        "water_resistance": "IP48",
+        "weight_g": 239,
+        "dimensions_mm": "153.5 x 132.6 x 5.6 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F741B",
+      "model": "Galaxy Z Flip6",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 6,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 480,
+        "512GB": 530
+      },
+      "msrp": {
+        "256GB": 1099,
+        "512GB": 1219
+      },
+      "colors": ["Silver Shadow", "Yellow", "Blue", "Mint"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2031-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.7\" Dynamic AMOLED 2X (Main) / 3.4\" Super AMOLED (Cover), 120Hz",
+        "processor": "Snapdragon 8 Gen 3 for Galaxy",
+        "ram": "12GB",
+        "battery": "4000mAh",
+        "camera": "50MP + 12MP",
+        "os": "One UI 6.1.1 / Android 14",
+        "water_resistance": "IP48",
+        "weight_g": 187,
+        "dimensions_mm": "165.1 x 71.9 x 6.9 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F946B",
+      "model": "Galaxy Z Fold5",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 5,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 700,
+        "512GB": 780,
+        "1TB": 850
+      },
+      "msrp": {
+        "256GB": 1799,
+        "512GB": 1919,
+        "1TB": 2159
+      },
+      "colors": ["Phantom Black", "Cream", "Icy Blue"],
+      "release_year": 2023,
+      "release_date": "2023-07-26",
+      "end_of_support_date": "2027-07-26",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "7.6\" Dynamic AMOLED 2X (Main) / 6.2\" (Cover), 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "12GB",
+        "battery": "4400mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 5.1.1 / Android 13",
+        "water_resistance": "IPX8",
+        "weight_g": 253,
+        "dimensions_mm": "154.9 x 129.9 x 6.1 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F731B",
+      "model": "Galaxy Z Flip5",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 5,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 400,
+        "512GB": 450
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1119
+      },
+      "colors": ["Graphite", "Cream", "Lavender", "Mint"],
+      "release_year": 2023,
+      "release_date": "2023-07-26",
+      "end_of_support_date": "2027-07-26",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.7\" Dynamic AMOLED 2X (Main) / 3.4\" Super AMOLED (Cover), 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "8GB",
+        "battery": "3700mAh",
+        "camera": "12MP + 12MP",
+        "os": "One UI 5.1.1 / Android 13",
+        "water_resistance": "IPX8",
+        "weight_g": 187,
+        "dimensions_mm": "165.1 x 71.9 x 6.9 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F936B",
+      "model": "Galaxy Z Fold4",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 4,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 500,
+        "512GB": 560,
+        "1TB": 620
+      },
+      "msrp": {
+        "256GB": 1799,
+        "512GB": 1919,
+        "1TB": 2159
+      },
+      "colors": ["Phantom Black", "Graygreen", "Beige"],
+      "release_year": 2022,
+      "release_date": "2022-08-10",
+      "end_of_support_date": "2026-08-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "7.6\" Dynamic AMOLED 2X (Main) / 6.2\" (Cover), 120Hz",
+        "processor": "Snapdragon 8+ Gen 1",
+        "ram": "12GB",
+        "battery": "4400mAh",
+        "camera": "50MP + 12MP + 10MP",
+        "os": "One UI 4.1.1 / Android 12",
+        "water_resistance": "IPX8",
+        "weight_g": 263,
+        "dimensions_mm": "155.1 x 130.1 x 6.3 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-F721B",
+      "model": "Galaxy Z Flip4",
+      "series": "Galaxy Z",
+      "category": "smartphone",
+      "generation": 4,
+      "storage_options": ["128GB", "256GB", "512GB"],
+      "base_values": {
+        "128GB": 250,
+        "256GB": 300,
+        "512GB": 350
+      },
+      "msrp": {
+        "128GB": 999,
+        "256GB": 1059,
+        "512GB": 1179
+      },
+      "colors": ["Bora Purple", "Graphite", "Pink Gold", "Blue"],
+      "release_year": 2022,
+      "release_date": "2022-08-10",
+      "end_of_support_date": "2026-08-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.7\" Dynamic AMOLED 2X (Main) / 1.9\" Super AMOLED (Cover), 120Hz",
+        "processor": "Snapdragon 8+ Gen 1",
+        "ram": "8GB",
+        "battery": "3700mAh",
+        "camera": "12MP + 12MP",
+        "os": "One UI 4.1.1 / Android 12",
+        "water_resistance": "IPX8",
+        "weight_g": 187,
+        "dimensions_mm": "165.2 x 71.9 x 6.9 (unfolded)"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X926B",
+      "model": "Galaxy Tab S10 Ultra",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 10,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 580,
+        "512GB": 640,
+        "1TB": 700
+      },
+      "msrp": {
+        "256GB": 1199,
+        "512GB": 1319,
+        "1TB": 1559
+      },
+      "colors": ["Moonstone Gray", "Platinum Silver"],
+      "release_year": 2024,
+      "release_date": "2024-09-26",
+      "end_of_support_date": "2028-09-26",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "14.6\" Dynamic AMOLED 2X, 2960x1848, 120Hz",
+        "processor": "MediaTek Dimensity 9300+ for Galaxy",
+        "ram": "12GB/16GB",
+        "battery": "11200mAh",
+        "camera": "13MP + 8MP (Rear) / 12MP + 12MP (Front)",
+        "os": "One UI 6.1.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 723,
+        "dimensions_mm": "326.4 x 208.6 x 5.4"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X826B",
+      "model": "Galaxy Tab S10+",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 10,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 450,
+        "512GB": 510
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1119
+      },
+      "colors": ["Moonstone Gray", "Platinum Silver"],
+      "release_year": 2024,
+      "release_date": "2024-09-26",
+      "end_of_support_date": "2028-09-26",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "12.4\" Dynamic AMOLED 2X, 2800x1752, 120Hz",
+        "processor": "MediaTek Dimensity 9300+ for Galaxy",
+        "ram": "12GB",
+        "battery": "10090mAh",
+        "camera": "13MP + 8MP (Rear) / 12MP + 12MP (Front)",
+        "os": "One UI 6.1.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 571,
+        "dimensions_mm": "285.4 x 185.4 x 5.6"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X720B",
+      "model": "Galaxy Tab S10",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 10,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 340,
+        "256GB": 390
+      },
+      "msrp": {
+        "128GB": 749,
+        "256GB": 869
+      },
+      "colors": ["Moonstone Gray", "Platinum Silver"],
+      "release_year": 2024,
+      "release_date": "2024-09-26",
+      "end_of_support_date": "2028-09-26",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "11.0\" Dynamic AMOLED 2X, 2560x1600, 120Hz",
+        "processor": "MediaTek Dimensity 9300+ for Galaxy",
+        "ram": "8GB/12GB",
+        "battery": "8400mAh",
+        "camera": "13MP (Rear) / 12MP (Front)",
+        "os": "One UI 6.1.1 / Android 14",
+        "water_resistance": "IP68",
+        "weight_g": 498,
+        "dimensions_mm": "254.3 x 165.8 x 5.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X816B",
+      "model": "Galaxy Tab S9 Ultra",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 9,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 500,
+        "512GB": 560,
+        "1TB": 620
+      },
+      "msrp": {
+        "256GB": 1199,
+        "512GB": 1319,
+        "1TB": 1559
+      },
+      "colors": ["Graphite", "Beige"],
+      "release_year": 2023,
+      "release_date": "2023-08-11",
+      "end_of_support_date": "2027-08-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "14.6\" Dynamic AMOLED 2X, 2960x1848, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "12GB/16GB",
+        "battery": "11200mAh",
+        "camera": "13MP + 8MP (Rear) / 12MP + 12MP (Front)",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 732,
+        "dimensions_mm": "326.4 x 208.6 x 5.5"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X810B",
+      "model": "Galaxy Tab S9+",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 9,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 380,
+        "512GB": 430
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1119
+      },
+      "colors": ["Graphite", "Beige"],
+      "release_year": 2023,
+      "release_date": "2023-08-11",
+      "end_of_support_date": "2027-08-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "12.4\" Dynamic AMOLED 2X, 2800x1752, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "12GB",
+        "battery": "10090mAh",
+        "camera": "13MP + 8MP (Rear) / 12MP + 12MP (Front)",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 586,
+        "dimensions_mm": "285.4 x 185.4 x 5.7"
+      }
+    },
+    {
+      "device_id": "DEV-SM-X710B",
+      "model": "Galaxy Tab S9",
+      "series": "Galaxy Tab S",
+      "category": "tablet",
+      "generation": 9,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 280,
+        "256GB": 320
+      },
+      "msrp": {
+        "128GB": 799,
+        "256GB": 899
+      },
+      "colors": ["Graphite", "Beige"],
+      "release_year": 2023,
+      "release_date": "2023-08-11",
+      "end_of_support_date": "2027-08-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "11.0\" Dynamic AMOLED 2X, 2560x1600, 120Hz",
+        "processor": "Snapdragon 8 Gen 2 for Galaxy",
+        "ram": "8GB/12GB",
+        "battery": "8400mAh",
+        "camera": "13MP (Rear) / 12MP (Front)",
+        "os": "One UI 5.1 / Android 13",
+        "water_resistance": "IP68",
+        "weight_g": 498,
+        "dimensions_mm": "254.3 x 165.8 x 5.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-L705U",
+      "model": "Galaxy Watch Ultra",
+      "series": "Galaxy Watch",
+      "category": "watch",
+      "generation": 1,
+      "storage_options": ["32GB"],
+      "base_values": {
+        "32GB": 250
+      },
+      "msrp": {
+        "32GB": 649
+      },
+      "colors": ["Titanium Gray", "Titanium White", "Titanium Silver"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2028-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "1.47\" Super AMOLED, 480x480",
+        "processor": "Exynos W1000",
+        "ram": "2GB",
+        "battery": "590mAh",
+        "os": "Wear OS 5 / One UI Watch 6",
+        "water_resistance": "10ATM + IP68",
+        "weight_g": 60,
+        "dimensions_mm": "47.4 x 47.1 x 12.1"
+      }
+    },
+    {
+      "device_id": "DEV-SM-L505U",
+      "model": "Galaxy Watch7",
+      "series": "Galaxy Watch",
+      "category": "watch",
+      "generation": 7,
+      "storage_options": ["16GB"],
+      "base_values": {
+        "16GB": 120
+      },
+      "msrp": {
+        "16GB": 299
+      },
+      "colors": ["Green", "Silver", "Cream"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2028-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "1.47\" Super AMOLED, 480x480",
+        "processor": "Exynos W1000",
+        "ram": "2GB",
+        "battery": "425mAh",
+        "os": "Wear OS 5 / One UI Watch 6",
+        "water_resistance": "5ATM + IP68",
+        "weight_g": 33,
+        "dimensions_mm": "44.4 x 44.4 x 9.7"
+      }
+    },
+    {
+      "device_id": "DEV-SM-L505C",
+      "model": "Galaxy Watch7 Classic",
+      "series": "Galaxy Watch",
+      "category": "watch",
+      "generation": 7,
+      "storage_options": ["16GB"],
+      "base_values": {
+        "16GB": 160
+      },
+      "msrp": {
+        "16GB": 399
+      },
+      "colors": ["Silver", "Black"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2028-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "1.47\" Super AMOLED, 480x480",
+        "processor": "Exynos W1000",
+        "ram": "2GB",
+        "battery": "425mAh",
+        "os": "Wear OS 5 / One UI Watch 6",
+        "water_resistance": "5ATM + IP68",
+        "weight_g": 52,
+        "dimensions_mm": "47.0 x 47.0 x 12.0"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R960",
+      "model": "Galaxy Watch6 Classic",
+      "series": "Galaxy Watch",
+      "category": "watch",
+      "generation": 6,
+      "storage_options": ["16GB"],
+      "base_values": {
+        "16GB": 150
+      },
+      "msrp": {
+        "16GB": 399
+      },
+      "colors": ["Black", "Silver"],
+      "release_year": 2023,
+      "release_date": "2023-08-11",
+      "end_of_support_date": "2027-08-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "1.47\" Super AMOLED, 480x480",
+        "processor": "Exynos W930",
+        "ram": "2GB",
+        "battery": "425mAh",
+        "os": "Wear OS 4 / One UI Watch 5",
+        "water_resistance": "5ATM + IP68",
+        "weight_g": 52,
+        "dimensions_mm": "46.5 x 46.5 x 10.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R940",
+      "model": "Galaxy Watch6",
+      "series": "Galaxy Watch",
+      "category": "watch",
+      "generation": 6,
+      "storage_options": ["16GB"],
+      "base_values": {
+        "16GB": 100
+      },
+      "msrp": {
+        "16GB": 299
+      },
+      "colors": ["Graphite", "Gold", "Silver"],
+      "release_year": 2023,
+      "release_date": "2023-08-11",
+      "end_of_support_date": "2027-08-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "1.47\" Super AMOLED, 480x480",
+        "processor": "Exynos W930",
+        "ram": "2GB",
+        "battery": "425mAh",
+        "os": "Wear OS 4 / One UI Watch 5",
+        "water_resistance": "5ATM + IP68",
+        "weight_g": 33,
+        "dimensions_mm": "44.4 x 44.4 x 9.0"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R560",
+      "model": "Galaxy Ring",
+      "series": "Galaxy Ring",
+      "category": "wearable",
+      "generation": 1,
+      "storage_options": ["N/A"],
+      "base_values": {
+        "N/A": 120
+      },
+      "msrp": {
+        "N/A": 399
+      },
+      "colors": ["Titanium Black", "Titanium Silver", "Titanium Gold"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2028-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "N/A",
+        "processor": "N/A",
+        "ram": "N/A",
+        "battery": "18mAh (Size 9)",
+        "os": "Samsung Health integration",
+        "water_resistance": "10ATM + IP68",
+        "weight_g": 3,
+        "dimensions_mm": "Sizes 5-13"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R630",
+      "model": "Galaxy Buds3 Pro",
+      "series": "Galaxy Buds",
+      "category": "earbuds",
+      "generation": 3,
+      "storage_options": ["N/A"],
+      "base_values": {
+        "N/A": 95
+      },
+      "msrp": {
+        "N/A": 249
+      },
+      "colors": ["Silver", "White"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2027-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "driver": "Dual: 10.5mm dynamic + 6.1mm planar",
+        "anc": "Intelligent ANC + Ambient Sound",
+        "battery": "5.5h (ANC on) / 7h (ANC off), 26h with case",
+        "connectivity": "Bluetooth 5.4, LE Audio",
+        "water_resistance": "IP57",
+        "weight_g": 5.4,
+        "codec": "SSC HiFi, AAC, SBC"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R620",
+      "model": "Galaxy Buds3",
+      "series": "Galaxy Buds",
+      "category": "earbuds",
+      "generation": 3,
+      "storage_options": ["N/A"],
+      "base_values": {
+        "N/A": 60
+      },
+      "msrp": {
+        "N/A": 179
+      },
+      "colors": ["Silver", "White"],
+      "release_year": 2024,
+      "release_date": "2024-07-10",
+      "end_of_support_date": "2027-07-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "driver": "11mm dynamic",
+        "anc": "Adaptive ANC + Ambient Sound",
+        "battery": "6h (ANC on) / 7h (ANC off), 30h with case",
+        "connectivity": "Bluetooth 5.4, LE Audio",
+        "water_resistance": "IP57",
+        "weight_g": 4.7,
+        "codec": "SSC HiFi, AAC, SBC"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R510",
+      "model": "Galaxy Buds2 Pro",
+      "series": "Galaxy Buds",
+      "category": "earbuds",
+      "generation": 2,
+      "storage_options": ["N/A"],
+      "base_values": {
+        "N/A": 70
+      },
+      "msrp": {
+        "N/A": 229
+      },
+      "colors": ["Graphite", "White", "Bora Purple"],
+      "release_year": 2022,
+      "release_date": "2022-08-10",
+      "end_of_support_date": "2025-08-10",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "driver": "Dual: 10mm + 5.3mm coaxial 2-way",
+        "anc": "Intelligent ANC + Ambient Sound",
+        "battery": "5h (ANC on) / 8h (ANC off), 29h with case",
+        "connectivity": "Bluetooth 5.3",
+        "water_resistance": "IPX7",
+        "weight_g": 5.5,
+        "codec": "SSC, AAC, SBC"
+      }
+    },
+    {
+      "device_id": "DEV-SM-R400",
+      "model": "Galaxy Buds FE",
+      "series": "Galaxy Buds",
+      "category": "earbuds",
+      "generation": 1,
+      "storage_options": ["N/A"],
+      "base_values": {
+        "N/A": 40
+      },
+      "msrp": {
+        "N/A": 99
+      },
+      "colors": ["Graphite", "White"],
+      "release_year": 2023,
+      "release_date": "2023-10-05",
+      "end_of_support_date": "2026-10-05",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "driver": "Dual: 10mm + 5.3mm coaxial 2-way",
+        "anc": "Active ANC + Ambient Sound",
+        "battery": "6h (ANC on) / 8.5h (ANC off), 21h with case",
+        "connectivity": "Bluetooth 5.2",
+        "water_resistance": "IPX2",
+        "weight_g": 5.6,
+        "codec": "SSC, AAC, SBC"
+      }
+    },
+    {
+      "device_id": "DEV-NP960",
+      "model": "Galaxy Book4 Ultra",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 4,
+      "storage_options": ["512GB", "1TB"],
+      "base_values": {
+        "512GB": 650,
+        "1TB": 750
+      },
+      "msrp": {
+        "512GB": 2399,
+        "1TB": 2899
+      },
+      "colors": ["Moonstone Gray"],
+      "release_year": 2024,
+      "release_date": "2024-02-15",
+      "end_of_support_date": "2028-02-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "16\" 3K AMOLED, 2880x1800, 120Hz",
+        "processor": "Intel Core Ultra 9 185H / NVIDIA RTX 4070",
+        "ram": "32GB",
+        "battery": "76Wh",
+        "os": "Windows 11 Pro",
+        "weight_g": 1870,
+        "dimensions_mm": "355.4 x 250.4 x 16.5"
+      }
+    },
+    {
+      "device_id": "DEV-NP940",
+      "model": "Galaxy Book4 Pro",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 4,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 400,
+        "512GB": 480,
+        "1TB": 560
+      },
+      "msrp": {
+        "256GB": 1449,
+        "512GB": 1649,
+        "1TB": 1949
+      },
+      "colors": ["Moonstone Gray", "Platinum Silver"],
+      "release_year": 2024,
+      "release_date": "2024-02-15",
+      "end_of_support_date": "2028-02-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "16\" 3K AMOLED, 2880x1800, 120Hz",
+        "processor": "Intel Core Ultra 7 155H",
+        "ram": "16GB",
+        "battery": "76Wh",
+        "os": "Windows 11 Home",
+        "weight_g": 1550,
+        "dimensions_mm": "355.4 x 250.4 x 11.6"
+      }
+    },
+    {
+      "device_id": "DEV-NP930",
+      "model": "Galaxy Book4 Pro 360",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 4,
+      "storage_options": ["256GB", "512GB", "1TB"],
+      "base_values": {
+        "256GB": 420,
+        "512GB": 500,
+        "1TB": 580
+      },
+      "msrp": {
+        "256GB": 1499,
+        "512GB": 1699,
+        "1TB": 1999
+      },
+      "colors": ["Moonstone Gray", "Platinum Silver"],
+      "release_year": 2024,
+      "release_date": "2024-02-15",
+      "end_of_support_date": "2028-02-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "16\" 3K AMOLED, 2880x1800, 120Hz, Touch + S Pen",
+        "processor": "Intel Core Ultra 7 155H",
+        "ram": "16GB",
+        "battery": "76Wh",
+        "os": "Windows 11 Home",
+        "weight_g": 1660,
+        "dimensions_mm": "355.4 x 252.2 x 12.8"
+      }
+    },
+    {
+      "device_id": "DEV-NP920",
+      "model": "Galaxy Book4 360",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 4,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 300,
+        "512GB": 360
+      },
+      "msrp": {
+        "256GB": 999,
+        "512GB": 1149
+      },
+      "colors": ["Gray", "Silver"],
+      "release_year": 2024,
+      "release_date": "2024-02-15",
+      "end_of_support_date": "2028-02-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "15.6\" FHD AMOLED, 1920x1080, 60Hz, Touch",
+        "processor": "Intel Core Ultra 5 125U",
+        "ram": "8GB/16GB",
+        "battery": "68Wh",
+        "os": "Windows 11 Home",
+        "weight_g": 1560,
+        "dimensions_mm": "355.4 x 237.2 x 12.9"
+      }
+    },
+    {
+      "device_id": "DEV-NP750",
+      "model": "Galaxy Book4",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 4,
+      "storage_options": ["256GB", "512GB"],
+      "base_values": {
+        "256GB": 220,
+        "512GB": 280
+      },
+      "msrp": {
+        "256GB": 749,
+        "512GB": 899
+      },
+      "colors": ["Gray", "Silver"],
+      "release_year": 2024,
+      "release_date": "2024-02-15",
+      "end_of_support_date": "2028-02-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "15.6\" FHD LED, 1920x1080, 60Hz",
+        "processor": "Intel Core Ultra 5 125U",
+        "ram": "8GB/16GB",
+        "battery": "54Wh",
+        "os": "Windows 11 Home",
+        "weight_g": 1550,
+        "dimensions_mm": "356.6 x 229.1 x 15.4"
+      }
+    },
+    {
+      "device_id": "DEV-NP340",
+      "model": "Galaxy Book Go",
+      "series": "Galaxy Book",
+      "category": "notebook",
+      "generation": 1,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 100,
+        "256GB": 130
+      },
+      "msrp": {
+        "128GB": 349,
+        "256GB": 399
+      },
+      "colors": ["Silver"],
+      "release_year": 2024,
+      "release_date": "2024-03-15",
+      "end_of_support_date": "2027-03-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "14\" FHD LED, 1920x1080, 60Hz",
+        "processor": "Snapdragon 7c+ Gen 3",
+        "ram": "8GB",
+        "battery": "42.3Wh",
+        "os": "Windows 11 Home (S Mode)",
+        "weight_g": 1380,
+        "dimensions_mm": "324.7 x 220.0 x 14.9"
+      }
+    },
+    {
+      "device_id": "DEV-SM-A556B",
+      "model": "Galaxy A55",
+      "series": "Galaxy A",
+      "category": "smartphone",
+      "generation": 55,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 140,
+        "256GB": 170
+      },
+      "msrp": {
+        "128GB": 449,
+        "256GB": 509
+      },
+      "colors": ["Awesome Iceblue", "Awesome Lilac", "Awesome Lemon", "Awesome Navy"],
+      "release_year": 2024,
+      "release_date": "2024-03-11",
+      "end_of_support_date": "2028-03-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.6\" Super AMOLED, FHD+, 120Hz",
+        "processor": "Exynos 1480",
+        "ram": "8GB",
+        "battery": "5000mAh",
+        "camera": "50MP + 12MP + 5MP",
+        "os": "One UI 6.1 / Android 14",
+        "water_resistance": "IP67",
+        "weight_g": 213,
+        "dimensions_mm": "158.0 x 77.0 x 8.2"
+      }
+    },
+    {
+      "device_id": "DEV-SM-A356B",
+      "model": "Galaxy A35",
+      "series": "Galaxy A",
+      "category": "smartphone",
+      "generation": 35,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 100,
+        "256GB": 130
+      },
+      "msrp": {
+        "128GB": 399,
+        "256GB": 449
+      },
+      "colors": ["Awesome Iceblue", "Awesome Lilac", "Awesome Lemon", "Awesome Navy"],
+      "release_year": 2024,
+      "release_date": "2024-03-11",
+      "end_of_support_date": "2028-03-11",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.6\" Super AMOLED, FHD+, 120Hz",
+        "processor": "Exynos 1380",
+        "ram": "6GB/8GB",
+        "battery": "5000mAh",
+        "camera": "50MP + 8MP + 5MP",
+        "os": "One UI 6.1 / Android 14",
+        "water_resistance": "IP67",
+        "weight_g": 209,
+        "dimensions_mm": "161.7 x 78.0 x 8.2"
+      }
+    },
+    {
+      "device_id": "DEV-SM-A256B",
+      "model": "Galaxy A25",
+      "series": "Galaxy A",
+      "category": "smartphone",
+      "generation": 25,
+      "storage_options": ["128GB", "256GB"],
+      "base_values": {
+        "128GB": 70,
+        "256GB": 90
+      },
+      "msrp": {
+        "128GB": 299,
+        "256GB": 349
+      },
+      "colors": ["Blue Black", "Blue", "Yellow"],
+      "release_year": 2023,
+      "release_date": "2023-12-15",
+      "end_of_support_date": "2027-12-15",
+      "status": "active",
+      "trade_in_eligible": true,
+      "specs": {
+        "display": "6.5\" Super AMOLED, FHD+, 120Hz",
+        "processor": "Exynos 1280",
+        "ram": "6GB/8GB",
+        "battery": "5000mAh",
+        "camera": "50MP + 8MP + 2MP",
+        "os": "One UI 6 / Android 14",
+        "water_resistance": "IP67",
+        "weight_g": 197,
+        "dimensions_mm": "159.7 x 76.9 x 8.3"
+      }
+    }
+  ],
+  "condition_multipliers": {
+    "excellent": 1.0,
+    "good": 0.85,
+    "fair": 0.65,
+    "poor": 0.40
+  },
+  "condition_descriptions": {
+    "excellent": "Like new. No scratches, dents, or wear. Fully functional with no issues.",
+    "good": "Minor wear. Light scratches on screen or body. Fully functional.",
+    "fair": "Moderate wear. Visible scratches or small dents. Fully functional.",
+    "poor": "Heavy wear. Significant damage or cracks. May have functional issues."
+  },
+  "current_promotional_bonus": {
+    "amount": 50,
+    "description": "Spring Trade-in Bonus",
+    "valid_until": "2026-04-30",
+    "eligible_categories": ["smartphone", "tablet"]
+  },
+  "functional_issues_deductions": {
+    "battery_degraded": 30,
+    "battery_issue": 30,
+    "screen_burn": 50,
+    "speaker_issues": 25,
+    "speaker_issue": 25,
+    "camera_issues": 40,
+    "charging_port": 35,
+    "charging_issue": 35,
+    "button_malfunction": 20,
+    "button_issue": 20,
+    "connectivity_issue": 15,
+    "fingerprint_sensor": 30,
+    "face_recognition": 20,
+    "gps_malfunction": 15,
+    "microphone_issue": 25
+  },
+  "cosmetic_issues_deductions": {
+    "screen_scratches": 15,
+    "screen_cracks": 100,
+    "back_scratches": 10,
+    "back_cracks": 60,
+    "dents": 25,
+    "discoloration": 15,
+    "hinge_wear": 40,
+    "s_pen_damage": 20,
+    "bezel_damage": 15,
+    "port_damage": 20
+  },
+  "vision_assessment_criteria": {
+    "screen_condition": {
+      "no_scratches": "excellent",
+      "light_scratches": "good",
+      "visible_scratches": "fair",
+      "cracked": "poor"
+    },
+    "body_condition": {
+      "pristine": "excellent",
+      "minor_wear": "good",
+      "dents_scratches": "fair",
+      "major_damage": "poor"
+    },
+    "camera_condition": {
+      "clear": "excellent",
+      "minor_smudge": "good",
+      "scratched": "fair",
+      "cracked": "poor"
+    },
+    "hinge_condition": {
+      "tight_no_play": "excellent",
+      "slight_wobble": "good",
+      "loose_creaking": "fair",
+      "broken_misaligned": "poor"
+    }
+  },
+  "region_multipliers": {
+    "US": {
+      "multiplier": 1.0,
+      "currency": "USD",
+      "currency_symbol": "$",
+      "tax_included": false
+    },
+    "KR": {
+      "multiplier": 0.92,
+      "currency": "KRW",
+      "currency_symbol": "원",
+      "base_rate": 1350,
+      "tax_included": true
+    },
+    "UK": {
+      "multiplier": 0.95,
+      "currency": "GBP",
+      "currency_symbol": "£",
+      "base_rate": 0.79,
+      "tax_included": true
+    },
+    "DE": {
+      "multiplier": 0.93,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "base_rate": 0.92,
+      "tax_included": true
+    },
+    "JP": {
+      "multiplier": 0.88,
+      "currency": "JPY",
+      "currency_symbol": "円",
+      "base_rate": 155,
+      "tax_included": true
+    },
+    "SG": {
+      "multiplier": 0.96,
+      "currency": "SGD",
+      "currency_symbol": "S$",
+      "base_rate": 1.35,
+      "tax_included": true
+    }
+  },
+  "carrier_adjustments": {
+    "unlocked": { "adjustment": 0, "label": "Unlocked / SIM-Free" },
+    "samsung_direct": { "adjustment": 10, "label": "Samsung.com Direct" },
+    "att": { "adjustment": -15, "label": "AT&T" },
+    "verizon": { "adjustment": -15, "label": "Verizon" },
+    "tmobile": { "adjustment": -10, "label": "T-Mobile" },
+    "skt": { "adjustment": -10, "label": "SK Telecom" },
+    "kt": { "adjustment": -10, "label": "KT" },
+    "lgu": { "adjustment": -10, "label": "LG U+" },
+    "docomo": { "adjustment": -20, "label": "NTT Docomo" },
+    "other_locked": { "adjustment": -25, "label": "Other Carrier-Locked" }
+  },
+  "depreciation_schedule": {
+    "year_0": 1.0,
+    "year_1": 0.75,
+    "year_2": 0.55,
+    "year_3": 0.38,
+    "year_4": 0.25,
+    "year_5_plus": 0.15
+  }
+}
