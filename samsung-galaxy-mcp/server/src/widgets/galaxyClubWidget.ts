@@ -5,7 +5,7 @@ export function getGalaxyClubWidgetHtml(): string {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>New Galaxy Club</title>
+  <title>New 갤럭시 AI 구독클럽</title>
   <style>
     :root {
       --samsung-blue: #1428a0;
@@ -27,13 +27,12 @@ export function getGalaxyClubWidgetHtml(): string {
         --bg-page: #1a1a1a;
       }
       body { color-scheme: dark; }
+      .device-row { border-color: #444; }
+      .device-row.closed { background: #333; }
+      .residual-tag { background: #1e2a5a; color: #93b4f5; }
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'SamsungOne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -42,340 +41,11 @@ export function getGalaxyClubWidgetHtml(): string {
       color: var(--text-primary);
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .header { text-align: center; margin-bottom: 20px; }
+    .header h2 { font-size: 22px; font-weight: 700; color: var(--samsung-blue); }
+    .header .tagline { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
 
-    .header h2 {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--samsung-blue);
-    }
-
-    .header .tagline {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
-    .plans-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .plan-card {
-      background: var(--bg-card);
-      border-radius: var(--border-radius);
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border: 2px solid transparent;
-      transition: border-color 0.2s;
-    }
-
-    .plan-card.recommended {
-      border-color: var(--samsung-blue);
-    }
-
-    .plan-card.premium {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: white;
-    }
-
-    .plan-card.premium .plan-price,
-    .plan-card.premium .plan-name {
-      color: var(--premium-gold);
-    }
-
-    .recommended-badge {
-      display: inline-block;
-      background: var(--samsung-blue);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .plan-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .plan-name {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .plan-price {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--samsung-blue);
-    }
-
-    .plan-price span {
-      font-size: 14px;
-      font-weight: 400;
-    }
-
-    .plan-cycle {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    .plan-card.premium .plan-cycle {
-      color: rgba(255,255,255,0.7);
-    }
-
-    /* Care+ included value */
-    .care-plus-tag {
-      display: inline-block;
-      background: #eef2ff;
-      color: var(--samsung-blue);
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .plan-card.premium .care-plus-tag {
-      background: rgba(201,162,39,0.2);
-      color: var(--premium-gold);
-    }
-
-    .benefits-list {
-      list-style: none;
-      margin-bottom: 16px;
-    }
-
-    .benefits-list li {
-      font-size: 13px;
-      padding: 6px 0;
-      padding-left: 24px;
-      position: relative;
-    }
-
-    .benefits-list li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .plan-card.premium .benefits-list li::before {
-      color: var(--premium-gold);
-    }
-
-    .plan-buttons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .plan-cta {
-      flex: 1;
-      background: var(--samsung-blue);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .plan-cta.secondary {
-      background: transparent;
-      color: var(--samsung-blue);
-      border: 2px solid var(--samsung-blue);
-    }
-
-    .plan-card.premium .plan-cta {
-      background: var(--premium-gold);
-      color: #1a1a2e;
-    }
-
-    .plan-card.premium .plan-cta.secondary {
-      background: transparent;
-      color: var(--premium-gold);
-      border: 2px solid var(--premium-gold);
-    }
-
-    /* Lifecycle Timeline */
-    .lifecycle-section {
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--bg-card);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .lifecycle-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .timeline {
-      display: flex;
-      align-items: flex-start;
-      position: relative;
-    }
-
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .timeline-step {
-      flex: 1;
-      text-align: center;
-      position: relative;
-      opacity: 0;
-      animation: fadeSlideUp 0.4s ease-out forwards;
-    }
-
-    .timeline-step:nth-child(1) { animation-delay: 0.1s; }
-    .timeline-step:nth-child(2) { animation-delay: 0.3s; }
-    .timeline-step:nth-child(3) { animation-delay: 0.5s; }
-    .timeline-step:nth-child(4) { animation-delay: 0.7s; }
-    .timeline-step:nth-child(5) { animation-delay: 0.9s; }
-
-    .timeline-step .node {
-      width: 32px;
-      height: 32px;
-      background: var(--samsung-blue);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      margin: 0 auto 8px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .timeline-step:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      top: 16px;
-      left: calc(50% + 16px);
-      right: calc(-50% + 16px);
-      height: 2px;
-      background: var(--samsung-blue);
-      opacity: 0.3;
-    }
-
-    .timeline-step .step-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.3;
-    }
-
-    .timeline-step .step-month {
-      font-size: 10px;
-      color: var(--samsung-blue);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .timeline-step .step-desc {
-      font-size: 10px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-      line-height: 1.3;
-    }
-
-    /* Enrollment Steps */
-    .enrollment-section {
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--bg-card);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .enrollment-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .enrollment-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 8px 0;
-    }
-
-    .enrollment-step .step-num {
-      width: 24px;
-      height: 24px;
-      background: var(--samsung-blue);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-
-    .enrollment-step .step-text {
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .faq-section {
-      margin-top: 24px;
-    }
-
-    .faq-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .faq-item {
-      background: var(--bg-card);
-      border-radius: 8px;
-      margin-bottom: 8px;
-      overflow: hidden;
-    }
-
-    .faq-question {
-      padding: 12px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .faq-answer {
-      padding: 0 16px 12px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      display: none;
-    }
-
-    .faq-item.open .faq-answer {
-      display: block;
-    }
-
+    /* Plan Tabs */
     .plan-tabs {
       display: flex;
       background: var(--bg-page);
@@ -400,155 +70,254 @@ export function getGalaxyClubWidgetHtml(): string {
       font-family: inherit;
     }
 
-    .plan-tab:hover {
-      color: var(--text-primary);
-      background: rgba(255,255,255,0.5);
-    }
+    .plan-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.5); }
+    .plan-tab.active { background: white; color: var(--samsung-blue); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .plan-tab .tab-sub { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; color: var(--text-secondary); }
+    .plan-tab.active .tab-sub { color: var(--samsung-blue); }
 
-    .plan-tab.active {
-      background: white;
-      color: var(--samsung-blue);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    .plan-tab .tab-price {
-      display: block;
-      font-size: 11px;
-      font-weight: 400;
-      margin-top: 2px;
-      color: var(--text-secondary);
-    }
-
-    .plan-tab.active .tab-price {
-      color: var(--samsung-blue);
-    }
-
+    /* Plan Card */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .plan-card {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
       animation: fadeIn 0.3s ease-out;
     }
 
-    @keyframes shimmer {
-      0% { background-position: -400px 0; }
-      100% { background-position: 400px 0; }
+    .plan-card.recommended { border-color: var(--samsung-blue); }
+
+    .plan-card.premium-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+    }
+    .plan-card.premium-card .plan-name { color: var(--premium-gold); }
+    .plan-card.premium-card .residual-tag { background: rgba(201,162,39,0.2); color: var(--premium-gold); }
+    .plan-card.premium-card .device-row { border-color: rgba(255,255,255,0.1); }
+    .plan-card.premium-card .device-model { color: #e5e5e5; }
+    .plan-card.premium-card .device-price { color: var(--premium-gold); }
+    .plan-card.premium-card .benefits-list li::before { color: var(--premium-gold); }
+    .plan-card.premium-card .care-info { background: rgba(201,162,39,0.1); border-color: rgba(201,162,39,0.3); }
+    .plan-card.premium-card .plan-cta { background: var(--premium-gold); color: #1a1a2e; }
+
+    .recommended-badge {
+      display: inline-block;
+      background: var(--samsung-blue);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 12px;
     }
 
+    .plan-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+
+    .residual-tag {
+      display: inline-block;
+      background: #eef2ff;
+      color: var(--samsung-blue);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Device Pricing Table */
+    .device-table { margin-bottom: 16px; }
+    .device-table-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+
+    .device-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+    }
+
+    .device-row:last-child { border-bottom: none; }
+    .device-row.closed { opacity: 0.5; }
+
+    .device-model { font-weight: 600; }
+    .device-sub { font-size: 11px; color: var(--text-secondary); }
+    .device-price { font-weight: 700; color: var(--samsung-blue); white-space: nowrap; }
+    .closed-badge { font-size: 10px; color: #ef4444; margin-left: 4px; }
+
+    /* Care+ Info */
+    .care-info {
+      background: var(--bg-page);
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+
+    .care-info-title { font-weight: 600; margin-bottom: 6px; font-size: 12px; }
+    .care-info-item { padding: 2px 0; color: var(--text-secondary); }
+
+    /* Benefits */
+    .benefits-list { list-style: none; margin-bottom: 16px; }
+    .benefits-list li {
+      font-size: 13px;
+      padding: 5px 0;
+      padding-left: 22px;
+      position: relative;
+    }
+    .benefits-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    /* Accessory coupon */
+    .accessory-info {
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      background: var(--bg-page);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .accessory-info .coupon-icon { margin-right: 4px; }
+
+    /* CTA */
+    .plan-cta {
+      width: 100%;
+      background: var(--samsung-blue);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .plan-cta:hover { opacity: 0.9; }
+
+    /* Loss/theft notice */
+    .loss-notice {
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      background: #fef3c7;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    /* Lifecycle Timeline */
+    .lifecycle-section {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .lifecycle-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; text-align: center; }
+
+    .timeline { display: flex; align-items: flex-start; position: relative; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .timeline-step {
+      flex: 1; text-align: center; position: relative;
+      opacity: 0; animation: fadeSlideUp 0.4s ease-out forwards;
+    }
+    .timeline-step:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-step:nth-child(2) { animation-delay: 0.3s; }
+    .timeline-step:nth-child(3) { animation-delay: 0.5s; }
+    .timeline-step:nth-child(4) { animation-delay: 0.7s; }
+
+    .timeline-step .node {
+      width: 32px; height: 32px;
+      background: var(--samsung-blue); color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      margin: 0 auto 8px;
+      position: relative; z-index: 1;
+    }
+
+    .timeline-step:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 16px;
+      left: calc(50% + 16px); right: calc(-50% + 16px);
+      height: 2px; background: var(--samsung-blue); opacity: 0.3;
+    }
+
+    .timeline-step .step-label { font-size: 11px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+    .timeline-step .step-desc { font-size: 10px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3; }
+
+    /* Enrollment */
+    .enrollment-section {
+      margin-top: 20px; padding: 16px;
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .enrollment-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+    .enrollment-step { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; }
+    .enrollment-step .step-num {
+      width: 24px; height: 24px;
+      background: var(--samsung-blue); color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; flex-shrink: 0;
+    }
+    .enrollment-step .step-text { font-size: 13px; line-height: 1.4; }
+
+    /* FAQ */
+    .faq-section { margin-top: 24px; }
+    .faq-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    .faq-item { background: var(--bg-card); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .faq-question {
+      padding: 12px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-answer { padding: 0 16px 12px; font-size: 13px; color: var(--text-secondary); display: none; }
+    .faq-item.open .faq-answer { display: block; }
+
+    /* Error / Skeleton */
+    .error-state { text-align: center; padding: 32px 20px; }
+    .error-icon { font-size: 48px; margin-bottom: 12px; }
+    .error-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .error-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5; }
+    .retry-button {
+      padding: 10px 24px; border-radius: 8px;
+      background: var(--samsung-blue); color: white; border: none;
+      font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+
+    @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
     .skeleton {
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
       background-size: 800px 100%;
       animation: shimmer 1.5s infinite ease-in-out;
       border-radius: 6px;
     }
-
     .skeleton-header { height: 28px; width: 50%; margin: 0 auto 8px; }
     .skeleton-tagline { height: 16px; width: 60%; margin: 0 auto 20px; }
     .skeleton-card { height: 280px; width: 100%; border-radius: 12px; margin-bottom: 16px; }
     .skeleton-timeline { height: 80px; width: 100%; border-radius: 12px; }
-
     .loading-skeleton { padding: 16px; }
-
-    .device-selector {
-      background: var(--bg-page);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin: 16px 0;
-    }
-
-    .device-selector .selector-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .device-selector select {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 2px solid #e5e7eb;
-      font-size: 13px;
-      font-family: inherit;
-      background: white;
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23666'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      transition: border-color 0.2s;
-    }
-
-    .device-selector select:focus {
-      outline: none;
-      border-color: var(--samsung-blue);
-    }
-
-    .compare-cta {
-      margin-top: 10px;
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      background: var(--samsung-blue);
-      color: white;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .compare-cta:hover { background: #0d1f7a; }
-
-    .error-state {
-      text-align: center;
-      padding: 32px 20px;
-    }
-
-    .error-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    .error-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .error-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .retry-button {
-      padding: 10px 24px;
-      border-radius: 8px;
-      background: var(--samsung-blue);
-      color: white;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.2s;
-    }
-
-    .retry-button:hover { background: #0d1f7a; }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-secondary);
-    }
   </style>
 </head>
 <body>
@@ -557,13 +326,11 @@ export function getGalaxyClubWidgetHtml(): string {
       <div class="skeleton skeleton-header"></div>
       <div class="skeleton skeleton-tagline"></div>
       <div class="skeleton skeleton-card"></div>
-      <div class="skeleton skeleton-card"></div>
       <div class="skeleton skeleton-timeline"></div>
     </div>
   </div>
 
   <script>
-    // ===== RPC Bridge =====
     let rpcId = 0;
     const pendingRequests = new Map();
     let bridgeReady = null;
@@ -582,131 +349,77 @@ export function getGalaxyClubWidgetHtml(): string {
     const initializeBridge = async () => {
       try {
         await rpcRequest('ui/initialize', {
-          appInfo: { name: 'galaxy-club-widget', version: '1.0.0' },
+          appInfo: { name: 'galaxy-club-widget', version: '2.0.0' },
           appCapabilities: {},
           protocolVersion: '2026-01-26',
         });
         rpcNotify('ui/notifications/initialized', {});
-      } catch (e) {
-        console.error('Bridge init failed:', e);
-      }
+      } catch (e) { console.error('Bridge init failed:', e); }
     };
 
     bridgeReady = initializeBridge();
-
     const content = document.getElementById('content');
+
+    function fmtKRW(value) {
+      return value.toLocaleString() + '원';
+    }
 
     function renderGalaxyClub(data) {
       if (!data || !data.plans) {
-        content.innerHTML = '<div class="card"><div class="error-state"><div class="error-icon">😥</div><div class="error-title">플랜 정보를 불러올 수 없습니다</div><div class="error-desc">일시적인 오류가 발생했습니다.<br>잠시 후 다시 시도해 주세요.</div><button class="retry-button" onclick="location.reload()">다시 시도</button></div></div>';
+        content.innerHTML = '<div class="card"><div class="error-state"><div class="error-icon">😥</div><div class="error-title">정보를 불러올 수 없습니다</div><div class="error-desc">일시적인 오류가 발생했습니다.</div><button class="retry-button" onclick="location.reload()">다시 시도</button></div></div>';
         return;
       }
 
-      // Store plans for tab switching
       window._clubPlans = data.plans;
       window._clubData = data;
 
-      // Determine initial selected plan (recommended or first), restoring saved state if available
       const savedState = window.openai?.widgetState;
       const recommendedPlan = data.plans.find(p => p.is_recommended) || data.plans[0];
       const selectedPlanId = savedState?.selectedTab || recommendedPlan.id;
 
-      // Build tab bar
-      const tabsHtml = '<div class="plan-tabs">' + data.plans.map(plan =>
-        '<button class="plan-tab ' + (plan.id === selectedPlanId ? 'active' : '') + '" onclick="switchTab(\\'' + plan.id + '\\')">' +
-        plan.name + '<span class="tab-price">$' + plan.monthly_price + '/월</span></button>'
-      ).join('') + '</div>';
+      // Tabs
+      const tabsHtml = '<div class="plan-tabs">' + data.plans.map(plan => {
+        const subText = plan.residual_value_pct ? '잔존가 ' + plan.residual_value_pct + '%' : '';
+        return '<button class="plan-tab ' + (plan.id === selectedPlanId ? 'active' : '') + '" onclick="switchTab(\\'' + plan.id + '\\')">' +
+          plan.name + (subText ? '<span class="tab-sub">' + subText + '</span>' : '') + '</button>';
+      }).join('') + '</div>';
 
-      // Build single plan card for selected plan
       const initialPlan = data.plans.find(p => p.id === selectedPlanId) || recommendedPlan;
       const planCardHtml = buildPlanCard(initialPlan);
 
-      // Device selector for cost comparison
-      const deviceSelectorHtml = \`
-        <div class="device-selector">
-          <div class="selector-label">📱 기기를 선택하여 비용 비교</div>
-          <select id="device-select">
-            <option value="">기기를 선택하세요</option>
-            <option value="Galaxy S25 Ultra">Galaxy S25 Ultra ($1,299)</option>
-            <option value="Galaxy S25+">Galaxy S25+ ($999)</option>
-            <option value="Galaxy S25">Galaxy S25 ($799)</option>
-            <option value="Galaxy Z Fold6">Galaxy Z Fold6 ($1,899)</option>
-            <option value="Galaxy Z Flip6">Galaxy Z Flip6 ($1,099)</option>
-            <option value="Galaxy Tab S10 Ultra">Galaxy Tab S10 Ultra ($1,199)</option>
-          </select>
-          <button class="compare-cta" onclick="compareWithDevice(null)">비용 비교하기</button>
-        </div>
-      \`;
-
-      // Lifecycle timeline
+      // Lifecycle
       const lifecycle = data.lifecycle_stages || [];
       let lifecycleHtml = '';
       if (lifecycle.length > 0) {
-        lifecycleHtml = \`
-          <div class="lifecycle-section">
-            <div class="lifecycle-title">Galaxy Club 라이프사이클</div>
-            <div class="timeline">
-              \${lifecycle.map((stage, i) => \`
-                <div class="timeline-step">
-                  <div class="node">\${i + 1}</div>
-                  <div class="step-label">\${stage.label}</div>
-                  \${stage.month ? '<div class="step-month">' + stage.month + '개월</div>' : ''}
-                  \${stage.description ? '<div class="step-desc">' + stage.description + '</div>' : ''}
-                </div>
-              \`).join('')}
-            </div>
-          </div>
-        \`;
+        lifecycleHtml = '<div class="lifecycle-section"><div class="lifecycle-title">가입부터 반납까지</div><div class="timeline">' +
+          lifecycle.map((stage, i) => '<div class="timeline-step"><div class="node">' + (i + 1) + '</div><div class="step-label">' + stage.label + '</div>' +
+            (stage.description ? '<div class="step-desc">' + stage.description + '</div>' : '') + '</div>').join('') +
+          '</div></div>';
       }
 
-      // Enrollment steps
+      // Enrollment
       const steps = data.enrollment_steps || [];
       let enrollmentHtml = '';
       if (steps.length > 0) {
-        enrollmentHtml = \`
-          <div class="enrollment-section">
-            <div class="enrollment-title">가입 절차</div>
-            \${steps.map((step, i) => \`
-              <div class="enrollment-step">
-                <span class="step-num">\${i + 1}</span>
-                <span class="step-text">\${step}</span>
-              </div>
-            \`).join('')}
-          </div>
-        \`;
+        enrollmentHtml = '<div class="enrollment-section"><div class="enrollment-title">가입 절차</div>' +
+          steps.map((step, i) => '<div class="enrollment-step"><span class="step-num">' + (i + 1) + '</span><span class="step-text">' + step + '</span></div>').join('') +
+          '</div>';
       }
 
-      const faqHtml = data.faq && data.faq.length > 0 ? \`
-        <div class="faq-section">
-          <h3 class="faq-title">자주 묻는 질문</h3>
-          \${data.faq.map((faq, i) => \`
-            <div class="faq-item" onclick="toggleFaq(this)">
-              <div class="faq-question">
-                <span>\${faq.question}</span>
-                <span>▼</span>
-              </div>
-              <div class="faq-answer">\${faq.answer}</div>
-            </div>
-          \`).join('')}
-        </div>
-      \` : '';
+      // FAQ (max 3)
+      const faqItems = (data.faq || []).slice(0, 3);
+      const faqHtml = faqItems.length > 0 ? '<div class="faq-section"><h3 class="faq-title">자주 묻는 질문</h3>' +
+        faqItems.map(faq => '<div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>' + faq.question + '</span><span>▼</span></div><div class="faq-answer">' + faq.answer + '</div></div>').join('') +
+        ((data.faq || []).length > 3 ? '<div style="text-align:center;padding:8px;font-size:12px;color:var(--text-secondary)">더 궁금한 점은 채팅으로 물어보세요</div>' : '') +
+        '</div>' : '';
 
-      content.innerHTML = \`
-        <div class="header">
-          <h2>\${data.service_name || 'New Galaxy Club'}</h2>
-          <p class="tagline">\${data.tagline || '항상 최신 Galaxy를 사용하세요'}</p>
-        </div>
-        \${tabsHtml}
-        <div id="plan-card-container">
-          \${planCardHtml}
-        </div>
-        \${deviceSelectorHtml}
-        \${lifecycleHtml}
-        \${enrollmentHtml}
-        \${faqHtml}
-      \`;
+      content.innerHTML =
+        '<div class="header"><h2>' + (data.service_name || 'New 갤럭시 AI 구독클럽') + '</h2>' +
+        '<p class="tagline">' + (data.tagline || '가입부터 반납까지, Galaxy AI와 함께') + '</p></div>' +
+        tabsHtml +
+        '<div id="plan-card-container">' + planCardHtml + '</div>' +
+        lifecycleHtml + enrollmentHtml + faqHtml;
 
-      // Restore FAQ open/close states from saved widget state
       if (savedState?.faqStates) {
         document.querySelectorAll('.faq-item').forEach((el, i) => {
           if (savedState.faqStates[i]) el.classList.add('open');
@@ -715,27 +428,54 @@ export function getGalaxyClubWidgetHtml(): string {
     }
 
     function buildPlanCard(plan) {
-      const isPremium = plan.id.includes('premium') || plan.id.includes('family');
+      const is36 = plan.id === 'ngc-36mo';
       const isRecommended = plan.is_recommended;
-      const carePlusBenefit = plan.benefits.find(b => b.includes('Care+'));
-      const carePlusValue = carePlusBenefit ? carePlusBenefit.match(/\\$([\\d.]+)/)?.[1] : null;
+      const devices = plan.device_pricing || [];
 
-      return '<div class="plan-card ' + (isPremium ? 'premium' : '') + ' ' + (isRecommended ? 'recommended' : '') + '">' +
+      // Device pricing rows
+      const deviceRows = devices.map(d => {
+        const isClosed = d.closed;
+        return '<div class="device-row' + (isClosed ? ' closed' : '') + '">' +
+          '<div><div class="device-model">' + d.model + (isClosed ? '<span class="closed-badge">(가입종료)</span>' : '') + '</div>' +
+          (d.sub ? '<div class="device-sub">' + d.sub + '</div>' : '') + '</div>' +
+          '<div class="device-price">' + fmtKRW(d.monthly_price) + '/월 ×' + d.payments + '회</div>' +
+          '</div>';
+      }).join('');
+
+      // Care+ info
+      const careInfo = plan.care_plus || {};
+      let careHtml = '<div class="care-info"><div class="care-info-title">Samsung Care+ 포함</div>';
+      if (careInfo.s26) careHtml += '<div class="care-info-item">• S26: ' + careInfo.s26 + '</div>';
+      if (careInfo.others) careHtml += '<div class="care-info-item">• 기타: ' + careInfo.others + '</div>';
+      careHtml += '</div>';
+
+      // Accessory coupon
+      let accessoryHtml = '';
+      if (plan.accessory_coupon) {
+        accessoryHtml = '<div class="accessory-info"><span class="coupon-icon">🎁</span>' + plan.accessory_coupon;
+        if (plan.accessory_coupon_ultra) accessoryHtml += '<br><span class="coupon-icon">⚡</span>' + plan.accessory_coupon_ultra;
+        accessoryHtml += '</div>';
+      }
+
+      // Loss/theft notice (36mo only)
+      let lossHtml = '';
+      if (plan.loss_theft_notice) {
+        lossHtml = '<div class="loss-notice">⚠️ ' + plan.loss_theft_notice + '</div>';
+      }
+
+      // Benefits
+      const benefitsHtml = '<ul class="benefits-list">' +
+        (plan.benefits || []).slice(0, 6).map(b => '<li>' + b + '</li>').join('') + '</ul>';
+
+      return '<div class="plan-card' + (is36 ? ' premium-card' : '') + (isRecommended ? ' recommended' : '') + '">' +
         (isRecommended ? '<span class="recommended-badge">★ 추천</span>' : '') +
-        '<div class="plan-header">' +
-          '<div class="plan-name">' + plan.name + '</div>' +
-          '<div class="plan-price">$' + plan.monthly_price + '<span>/mo</span></div>' +
-        '</div>' +
-        '<div class="plan-cycle">' + plan.upgrade_cycle_months + '개월마다 업그레이드</div>' +
-        (carePlusValue ? '<span class="care-plus-tag">Care+ 포함 ($' + carePlusValue + '/월 가치)</span>' : '') +
-        '<ul class="benefits-list">' +
-          plan.benefits.slice(0, 6).map(b => '<li>' + b + '</li>').join('') +
-        '</ul>' +
-        '<div class="plan-buttons">' +
-          '<button class="plan-cta" onclick="selectPlan(\\'' + plan.id + '\\')">' + plan.name + ' 선택하기</button>' +
-          '<button class="plan-cta secondary" onclick="compareCost(\\'' + plan.id + '\\', \\'' + plan.name + '\\')">비용 비교하기</button>' +
-        '</div>' +
-      '</div>';
+        (plan.note ? '<span class="recommended-badge" style="background:#92400e;margin-left:4px">' + plan.note + '</span>' : '') +
+        '<div class="plan-name">' + plan.name + '</div>' +
+        '<div class="residual-tag">' + (plan.residual_value_desc || '') + ' (' + plan.return_window + ' 반납)</div>' +
+        '<div class="device-table"><div class="device-table-title">대상 기기 및 이용료</div>' + deviceRows + '</div>' +
+        careHtml + lossHtml + accessoryHtml + benefitsHtml +
+        '<button class="plan-cta" onclick="selectPlan(\\'' + plan.id + '\\')">' + plan.name + ' 가입하기</button>' +
+        '</div>';
     }
 
     function switchTab(planId) {
@@ -744,23 +484,16 @@ export function getGalaxyClubWidgetHtml(): string {
       const plan = plans.find(p => p.id === planId);
       if (!plan) return;
 
-      // Update active tab
       document.querySelectorAll('.plan-tab').forEach(tab => {
         tab.classList.remove('active');
-        if (tab.getAttribute('onclick').includes(planId)) {
-          tab.classList.add('active');
-        }
+        if (tab.getAttribute('onclick').includes(planId)) tab.classList.add('active');
       });
 
-      // Save selected tab state
       window._selectedTab = planId;
       window.openai?.setWidgetState?.({ selectedTab: planId, faqStates: Array.from(document.querySelectorAll('.faq-item')).map(el => el.classList.contains('open')) });
 
-      // Re-render plan card with animation
       const container = document.getElementById('plan-card-container');
-      if (container) {
-        container.innerHTML = buildPlanCard(plan);
-      }
+      if (container) container.innerHTML = buildPlanCard(plan);
     }
 
     function toggleFaq(element) {
@@ -771,62 +504,15 @@ export function getGalaxyClubWidgetHtml(): string {
 
     function selectPlan(planId) {
       window.parent.postMessage({
-        jsonrpc: '2.0',
-        method: 'ui/message',
-        params: {
-          role: 'user',
-          content: [{ type: 'text', text: planId.replace('ngc-', '') + ' 플랜에 가입하고 싶습니다. 다음 단계를 알려주세요.' }]
-        }
+        jsonrpc: '2.0', method: 'ui/message',
+        params: { role: 'user', content: [{ type: 'text', text: planId.replace('ngc-', '') + ' 플랜에 가입하고 싶습니다. 가입 페이지: https://www.samsung.com/sec/smartphones/galaxy-s26-ultra/buy/' }] }
       }, '*');
     }
 
-    function compareCost(planId, planName) {
-      const select = document.getElementById('device-select');
-      if (select && select.value) {
-        compareWithDevice(planId);
-        return;
-      }
-      window.parent.postMessage({
-        jsonrpc: '2.0',
-        method: 'ui/message',
-        params: {
-          role: 'user',
-          content: [{ type: 'text', text: 'Galaxy Club ' + planName + '과 일시불 구매 비용을 비교해주세요.' }]
-        }
-      }, '*');
-    }
-
-    async function compareWithDevice(planId) {
-      const select = document.getElementById('device-select');
-      if (!select || !select.value) {
-        alert('기기를 선택해주세요.');
-        return;
-      }
-      const deviceModel = select.value;
-      const planType = planId ? planId.replace('ngc-', '') : 'premium';
-      try {
-        await bridgeReady;
-        const response = await rpcRequest('tools/call', {
-          name: 'compare_galaxy_club_cost',
-          arguments: { device_model: deviceModel, plan_type: planType }
-        });
-        // Result will come through ui/notifications/tool-result
-      } catch (e) {
-        // Fallback to ui/message
-        window.parent.postMessage({
-          jsonrpc: '2.0', method: 'ui/message',
-          params: { role: 'user', content: [{ type: 'text', text: deviceModel + '로 Galaxy Club ' + planType + ' 비용 비교를 해주세요.' }] }
-        }, '*');
-      }
-    }
-
-    // Listen for tool results and RPC responses
     window.addEventListener('message', (event) => {
       if (event.source !== window.parent) return;
       const message = event.data;
       if (!message || message.jsonrpc !== '2.0') return;
-
-      // Handle RPC responses
       if (typeof message.id === 'number') {
         const pending = pendingRequests.get(message.id);
         if (pending) {
@@ -836,20 +522,16 @@ export function getGalaxyClubWidgetHtml(): string {
         }
         return;
       }
-
-      // Handle notifications
       if (message.method === 'ui/notifications/tool-result') {
         renderGalaxyClub(message.params?.structuredContent);
       }
     }, { passive: true });
 
-    // Listen for ChatGPT set_globals event
     window.addEventListener('openai:set_globals', (event) => {
       const data = event.detail?.globals?.toolOutput || window.openai?.toolOutput;
       if (data) renderGalaxyClub(data);
     }, { passive: true });
 
-    // Initial render - toolOutput IS the structuredContent directly
     if (window.openai?.toolOutput) {
       renderGalaxyClub(window.openai.toolOutput);
     }

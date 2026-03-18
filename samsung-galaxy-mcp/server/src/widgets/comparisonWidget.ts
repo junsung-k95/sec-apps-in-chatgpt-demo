@@ -431,6 +431,28 @@ export function getComparisonWidgetHtml(): string {
     const savedState = window.openai?.widgetState;
     if (savedState?.sliderValue) selectedPeriod = savedState.sliderValue;
 
+    function detectRegion() {
+      const lang = navigator.language || '';
+      if (lang.startsWith('ko')) return 'KR';
+      if (lang.startsWith('ja')) return 'JP';
+      if (lang === 'en-GB') return 'UK';
+      if (lang.startsWith('de')) return 'DE';
+      return null;
+    }
+
+    function fmtCompPrice(value) {
+      // If data is already in KRW (from Galaxy Club compare), skip conversion
+      if (currentCompData?.currency === 'KRW') {
+        return Math.round(value).toLocaleString() + '원';
+      }
+      const region = detectRegion();
+      const rates = currentCompData?.currency_rates;
+      if (!region || !rates || !rates[region] || !rates[region].base_rate) return '$' + value.toLocaleString();
+      const local = Math.round(value * rates[region].base_rate);
+      if (region === 'KR') return local.toLocaleString() + '원';
+      return (rates[region].symbol || '') + local.toLocaleString();
+    }
+
     function renderComparison(data) {
       if (!data || !data.comparison) {
         content.innerHTML = '<div class="card"><div class="error-state"><div class="error-icon">😥</div><div class="error-title">비교 데이터를 불러올 수 없습니다</div><div class="error-desc">일시적인 오류가 발생했습니다.<br>잠시 후 다시 시도해 주세요.</div><button class="retry-button" onclick="location.reload()">다시 시도</button></div></div>';
@@ -438,136 +460,94 @@ export function getComparisonWidgetHtml(): string {
       }
 
       currentCompData = data;
-      const { comparison, recommendation, lifecycle_stages, included_benefits_value, tradein_info } = data;
-      const club = comparison.club || {};
-      const outright = comparison.outright || {};
+      const { comparison, recommendation, lifecycle_stages } = data;
+      const withClub = comparison.with_club || {};
+      const withoutClub = comparison.without_club || {};
 
-      // Period calculation
-      const basePeriod = club.total_months || 12;
-      const period = selectedPeriod || basePeriod;
-      const monthlyCost = club.monthly_cost || 0;
-      const clubTotal = monthlyCost * period;
-      const carePlusValue = club.care_plus_value || 0;
-      const outrightCarePlusCost = outright.care_plus_cost || carePlusValue || 0;
-      const outrightTotal = (outright.device_price || 0) + outrightCarePlusCost - (outright.tradein_credit || 0);
-      const currentSavings = outrightTotal - clubTotal;
+      const devicePrice = withClub.device_price || 0;
+      const monthlyFee = withClub.monthly_fee || 0;
+      const totalMonths = withClub.total_months || 12;
+      const totalFee = withClub.total_fee || 0;
+      const residualValue = withClub.residual_value || 0;
+      const residualPct = withClub.residual_value_pct || 0;
+      const carePlusValue = withClub.care_plus_value || 0;
+      const afterReturn = withClub.after_return || 0;
 
-      // Savings banner
-      const savingsHtml = currentSavings > 0 ? \`
+      // 구독클럽 가치 배너
+      const clubValueHtml = \`
         <div class="savings-banner">
-          <div class="savings-label">Galaxy Club 선택 시 절약</div>
-          <div class="savings-amount">$\${currentSavings}</div>
-        </div>
-      \` : '';
-
-      // Period slider
-      const sliderHtml = \`
-        <div class="period-section">
-          <div class="period-label">
-            <span>사용 기간</span>
-            <span class="period-value">\${period}개월</span>
-          </div>
-          <input type="range" class="period-slider" min="0" max="3" step="1" value="\${[12,18,24,36].indexOf(period) >= 0 ? [12,18,24,36].indexOf(period) : 0}" oninput="changePeriod(this.value)" />
-          <div class="period-ticks"><span>12개월</span><span>18개월</span><span>24개월</span><span>36개월</span></div>
+          <div class="savings-label">반납 시 잔존가 보장</div>
+          <div class="savings-amount">\${fmtCompPrice(residualValue)}</div>
+          <div class="savings-label" style="margin-top:4px">기준가의 \${residualPct}% 현금 지급</div>
         </div>
       \`;
 
-      // Comparison columns
+      // 비용 구조 비교
       const comparisonHtml = \`
         <div class="comparison-grid">
           <div class="compare-col club">
-            <span class="col-badge">추천</span>
-            <div class="col-title">Galaxy Club</div>
-            <div class="cost-row"><span>월 비용</span><span class="highlight">$\${monthlyCost}/월</span></div>
-            <div class="cost-row"><span>\${period}개월 총액</span><span>$\${clubTotal}</span></div>
-            \${club.care_plus_included ? '<div class="cost-row"><span>Care+ 포함</span><span class="positive">$' + carePlusValue + ' 가치</span></div>' : ''}
-            \${club.upgrade_included ? '<div class="cost-row"><span>업그레이드</span><span class="positive">포함</span></div>' : ''}
-            <div class="cost-row total"><span>실질 비용</span><span class="highlight">$\${clubTotal}</span></div>
+            <span class="col-badge">구독클럽 가입 시</span>
+            <div class="col-title">\${withClub.plan_name || '12개월형'}</div>
+            <div class="cost-row"><span>기기 구매</span><span>\${fmtCompPrice(devicePrice)}</span></div>
+            <div class="cost-row"><span>이용료</span><span class="highlight">\${fmtCompPrice(monthlyFee)}/월 × \${totalMonths}회</span></div>
+            <div class="cost-row"><span>이용료 합계</span><span>\${fmtCompPrice(totalFee)}</span></div>
+            <div class="cost-row"><span>Care+ 포함</span><span class="positive">포함</span></div>
+            <div class="cost-row"><span>반납 시 보장금</span><span class="positive">-\${fmtCompPrice(residualValue)}</span></div>
+            <div class="cost-row total"><span>반납 후 실질 부담</span><span class="highlight">\${fmtCompPrice(afterReturn)}</span></div>
           </div>
           <div class="compare-col outright">
-            <span class="col-badge">일반 구매</span>
-            <div class="col-title">일시불 구매</div>
-            <div class="cost-row"><span>기기 가격</span><span>$\${outright.device_price}</span></div>
-            \${outright.care_plus_cost ? '<div class="cost-row"><span>Care+ 별도</span><span>+$' + outright.care_plus_cost + '/년</span></div>' : ''}
-            \${outright.tradein_credit ? '<div class="cost-row"><span>Trade-in 크레딧</span><span class="positive">-$' + outright.tradein_credit + '</span></div>' : ''}
-            <div class="cost-row total"><span>총 비용</span><span>$\${outrightTotal}</span></div>
+            <span class="col-badge">미가입 시</span>
+            <div class="col-title">일반 구매</div>
+            <div class="cost-row"><span>기기 구매</span><span>\${fmtCompPrice(withoutClub.device_price)}</span></div>
+            <div class="cost-row"><span>Care+ 별도</span><span>+\${fmtCompPrice(withoutClub.care_plus_separate)}/년</span></div>
+            <div class="cost-row"><span>중고 판매</span><span style="font-size:11px;color:var(--text-secondary)">시세 변동</span></div>
+            <div class="cost-row total"><span>총 비용</span><span>\${fmtCompPrice(withoutClub.total_with_care)}</span></div>
           </div>
         </div>
       \`;
 
-      // Trade-in info
-      let tradeinHtml = '';
-      if (tradein_info) {
-        tradeinHtml = \`
-          <div class="tradein-section">
-            <div class="tradein-title">\${tradein_info.device} Trade-in</div>
-            <div>예상 보상가: $\${tradein_info.estimated_value} — \${tradein_info.note}</div>
-          </div>
-        \`;
-      }
-
-      // Benefits
+      // 구독클럽 포함 혜택
       let benefitsHtml = '';
-      if (club.included_benefits && club.included_benefits.length > 0) {
+      if (withClub.included_benefits && withClub.included_benefits.length > 0) {
         benefitsHtml = \`
           <div class="benefits-section">
-            <div class="benefits-title">Galaxy Club 포함 혜택 \${included_benefits_value ? '($' + included_benefits_value + ' 가치)' : ''}</div>
-            \${club.included_benefits.map(b => '<span class="benefit-tag">' + b + '</span>').join('')}
+            <div class="benefits-title">구독클럽 포함 혜택</div>
+            \${withClub.included_benefits.map(b => '<span class="benefit-tag">' + b + '</span>').join('')}
           </div>
         \`;
       }
 
-      // Lifecycle
-      let lifecycleHtml = '';
-      if (lifecycle_stages && lifecycle_stages.length > 0) {
-        lifecycleHtml = \`
-          <div class="lifecycle-section">
-            <div class="lifecycle-title">Galaxy Club 라이프사이클</div>
-            <div class="timeline">
-              \${lifecycle_stages.map((stage, i) => \`
-                <div class="timeline-step">
-                  <div class="node">\${i + 1}</div>
-                  <div class="step-label">\${stage.label}</div>
-                  <div class="step-desc">\${stage.description || ''}</div>
-                </div>
-              \`).join('')}
-            </div>
-          </div>
-        \`;
-      }
+      // 핵심 안내
+      const noteHtml = \`
+        <div class="tradein-section">
+          <div class="tradein-title">💡 구독클럽 핵심</div>
+          <div>기기는 별도 구매하고, 구독클럽은 Care+ + 잔존가 보장 + 액세서리 쿠폰이 포함된 부가 서비스입니다. 반납 조건(외관 양호, 전원 정상, 계정 삭제) 충족 시 잔존가를 현금으로 받습니다.</div>
+        </div>
+      \`;
 
       // Recommendation
       let recHtml = '';
       if (recommendation) {
-        recHtml = '<div style="font-size:12px;color:var(--text-secondary);text-align:center;margin-bottom:8px;"><em>' + recommendation + '</em></div>';
+        recHtml = '<div style="font-size:12px;color:var(--text-secondary);text-align:center;margin:12px 0 8px;line-height:1.5;"><em>' + recommendation + '</em></div>';
       }
 
       content.innerHTML = \`
         <div class="card">
           <div class="header">
-            <h2>비용 비교</h2>
+            <h2>구독클럽 비용 분석</h2>
             \${data.device_model ? '<div class="device-name">' + data.device_model + '</div>' : ''}
           </div>
-          \${savingsHtml}
-          \${sliderHtml}
+          \${clubValueHtml}
           \${comparisonHtml}
-          \${tradeinHtml}
+          \${noteHtml}
           \${benefitsHtml}
-          \${lifecycleHtml}
           \${recHtml}
           <div class="cta-container">
-            <button class="cta-button primary" onclick="enrollClub()">Galaxy Club 가입</button>
+            <button class="cta-button primary" onclick="enrollClub()">구독클럽 가입하기</button>
             <button class="cta-button secondary" onclick="learnMore()">자세히 알아보기</button>
           </div>
         </div>
       \`;
-    }
-
-    const PERIOD_OPTIONS = [12, 18, 24, 36];
-    function changePeriod(index) {
-      selectedPeriod = PERIOD_OPTIONS[parseInt(index)] || 12;
-      window.openai?.setWidgetState?.({ sliderValue: selectedPeriod });
-      if (currentCompData) renderComparison(currentCompData);
     }
 
     function enrollClub() {
@@ -576,7 +556,7 @@ export function getComparisonWidgetHtml(): string {
         method: 'ui/message',
         params: {
           role: 'user',
-          content: [{ type: 'text', text: 'Galaxy Club에 가입하고 싶습니다. 가입 절차를 알려주세요.' }]
+          content: [{ type: 'text', text: '구독클럽에 가입하고 싶습니다. 가입 페이지: https://www.samsung.com/sec/smartphones/galaxy-s26-ultra/buy/' }]
         }
       }, '*');
     }
@@ -587,7 +567,7 @@ export function getComparisonWidgetHtml(): string {
         method: 'ui/message',
         params: {
           role: 'user',
-          content: [{ type: 'text', text: 'Galaxy Club에 대해 더 자세히 알려주세요.' }]
+          content: [{ type: 'text', text: '구독클럽에 대해 더 자세히 알려주세요.' }]
         }
       }, '*');
     }

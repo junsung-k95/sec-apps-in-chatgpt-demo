@@ -33,6 +33,72 @@ function generateAppraisalId(): string {
   return `appr-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 }
 
+// Currency formatting helpers
+function getCurrencyInfo(region: string) {
+  const rd = (devicesData as any).region_multipliers[region] || (devicesData as any).region_multipliers["US"];
+  return {
+    region_code: region,
+    currency: rd.currency || "USD",
+    symbol: rd.currency_symbol || "$",
+    base_rate: rd.base_rate || null,
+  };
+}
+
+function getAllCurrencyRates() {
+  return Object.fromEntries(
+    Object.entries((devicesData as any).region_multipliers).map(([k, v]: [string, any]) => [
+      k, { symbol: v.currency_symbol, base_rate: v.base_rate || null, currency: v.currency },
+    ])
+  );
+}
+
+function fmtPrice(usdValue: number, region: string): string {
+  const rd = (devicesData as any).region_multipliers[region];
+  if (!rd || region === "US" || !rd.base_rate) return `$${usdValue.toLocaleString("en-US")}`;
+  const local = Math.round(usdValue * rd.base_rate);
+  if (region === "KR") return `${local.toLocaleString("ko-KR")}원`;
+  return `${rd.currency_symbol}${local.toLocaleString()}`;
+}
+
+function fmtAdj(usdValue: number, region: string): string {
+  const rd = (devicesData as any).region_multipliers[region];
+  if (!rd || region === "US" || !rd.base_rate) return `${usdValue >= 0 ? "+" : ""}$${usdValue}`;
+  const local = Math.round(usdValue * rd.base_rate);
+  const sign = local >= 0 ? "+" : "-";
+  const formatted = Math.abs(local).toLocaleString();
+  if (region === "KR") return `${sign}${formatted}원`;
+  return `${sign}${rd.currency_symbol}${formatted}`;
+}
+
+// Tool logging wrapper — wraps registerAppTool to add request/response logging
+const _origRegisterAppTool = registerAppTool;
+const registerAppToolWithLogging: typeof registerAppTool = (server, name, config, handler) => {
+  const wrappedHandler = async (args: any, extra?: any) => {
+    const ts = new Date().toISOString();
+    console.log(`[${ts}] [TOOL] ${name} called`);
+    console.log(`  args: ${JSON.stringify(args)}`);
+    try {
+      const result = await handler(args, extra);
+      const sc = (result as any)?.structuredContent;
+      const status = sc?.error ? "ERROR" : "OK";
+      const summary: string[] = [];
+      if (sc?.error) summary.push(`error=${sc.error}`);
+      if (sc?.appraisal_id) summary.push(`appraisal=${sc.appraisal_id}`);
+      if (sc?.valuation?.final_value !== undefined) summary.push(`value=$${sc.valuation.final_value}`);
+      if (sc?.results?.length !== undefined) summary.push(`results=${sc.results.length}`);
+      if (sc?.plans?.length !== undefined) summary.push(`plans=${sc.plans.length}`);
+      if (sc?.savings !== undefined) summary.push(`savings=$${sc.savings}`);
+      if (sc?.eligibility_result?.eligible !== undefined) summary.push(`eligible=${sc.eligibility_result.eligible}`);
+      console.log(`[${new Date().toISOString()}] [TOOL] ${name} → ${status}${summary.length ? " | " + summary.join(", ") : ""}`);
+      return result;
+    } catch (e: any) {
+      console.error(`[${new Date().toISOString()}] [TOOL] ${name} → EXCEPTION: ${e.message}`);
+      throw e;
+    }
+  };
+  return _origRegisterAppTool(server, name, config, wrappedHandler as any);
+};
+
 function createSamsungServer(): McpServer {
   const server = new McpServer({
     name: "samsung-galaxy-services",
@@ -144,7 +210,7 @@ function createSamsungServer(): McpServer {
   // ============================================
 
   // Tool 0: Service Guidelines (ChatGPT가 첫 대화 시 호출)
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "get_service_guidelines",
     {
@@ -206,11 +272,27 @@ function createSamsungServer(): McpServer {
                 name: "New Galaxy Club",
                 description: "구독형 기기 업그레이드 프로그램. 비용 비교 기능 제공.",
                 tool_flow: [
-                  "1. get_galaxy_club_info — 플랜 소개",
-                  "2. compare_galaxy_club_cost — 일반 구매 대비 비용 비교 (사용자가 원할 때)",
+                  "1. get_galaxy_club_info — 플랜 소개 (위젯 표시)",
+                  "2. 플랜 안내 마지막에 반드시 역질문: '관심 있는 기기가 있으시면 일반 구매 대비 얼마나 절약되는지 비교해 드릴까요?'",
+                  "3. compare_galaxy_club_cost — 사용자가 기기를 알려주면 비용 비교 (비교 위젯 표시)",
                 ],
-                required_info: ["관심 기기 모델 (비교 시)", "현재 사용 기기 (Trade-in 비교 시)"],
-                conversation_example: "사용자: 'Galaxy Club이 뭐예요?' → get_galaxy_club_info 호출 → 사용자가 비교 원하면 compare_galaxy_club_cost 호출"
+                required_info: ["관심 기기 모델 (비교 시)"],
+                after_plan_intro: {
+                  must_ask: "플랜 소개 후 반드시 사용자에게 역질문하세요: '관심 있는 기기가 있으시면 Galaxy Club과 일반 구매 비용을 비교해 드릴까요?'",
+                  why: "비교 위젯이 별도로 있어서, 사용자가 기기명을 알려줘야 compare_galaxy_club_cost를 호출하여 정확한 비용 비교를 보여줄 수 있음"
+                },
+                comparison_guide: {
+                  description: "사용자가 기기명을 알려주면 compare_galaxy_club_cost를 호출하세요",
+                  example_flow: [
+                    "사용자: 'Galaxy S26 Ultra로 비교해주세요'",
+                    "→ compare_galaxy_club_cost({ device_model: 'Galaxy S26 Ultra', plan_type: '12mo' }) 호출",
+                    "→ 비교 위젯 표시: 이용료 합계, 잔존가 환급액, 실질 부담 금액",
+                    "→ 텍스트로 핵심 요약만 전달 (위젯에 상세 내용이 이미 표시됨)"
+                  ],
+                  plan_type_selection: "사용자가 기간을 지정하지 않으면 12mo로 비교. 사용자가 24개월/36개월을 언급하면 해당 기간으로 비교.",
+                  plan_type_values: "12mo / 24mo / 36mo (기존 basic/premium/family가 아님)"
+                },
+                conversation_example: "사용자: 'Galaxy Club이 뭐예요?' → get_galaxy_club_info 호출 → 플랜 안내 후 '관심 있는 기기가 있으시면 비교해 드릴까요?' → 사용자: 'S26 Ultra' → compare_galaxy_club_cost({ device_model: 'Galaxy S26 Ultra', plan_type: '12mo' }) 호출"
               },
               trade_in: {
                 name: "보상판매 (Trade-in)",
@@ -238,12 +320,54 @@ function createSamsungServer(): McpServer {
               }
             },
             vision_photo_guide: {
-              when: "사용자가 기기 사진을 업로드했을 때",
-              how: "Vision으로 사진을 분석하여 screen_condition, body_condition, camera_condition을 판단 후 해당 도구 호출",
-              criteria: {
-                screen: "no_scratches(깨끗) / light_scratches(미세) / visible_scratches(눈에 보임) / cracked(깨짐)",
-                body: "pristine(새것) / minor_wear(미세 흔적) / dents_scratches(찍힘) / major_damage(심한 파손)",
-                camera: "clear(깨끗) / minor_smudge(얼룩) / scratched(스크래치) / cracked(깨짐)"
+              photo_request_guide: {
+                description: "사용자에게 사진을 요청할 때 아래 안내를 포함하세요",
+                required_photos: [
+                  "앞면 전체: 화면이 꺼진 상태에서 기기 전체가 보이도록 1장",
+                  "뒷면 전체: 카메라 모듈이 선명하게 보이도록 1장",
+                ],
+                optional_photos: [
+                  "흠집/파손 부위가 있다면 해당 부위 근접 사진 추가"
+                ],
+                tips: [
+                  "밝은 곳에서 촬영",
+                  "반사/그림자 최소화",
+                  "초점이 선명하도록 가까이 촬영"
+                ],
+                rejected_photos: [
+                  "스크린샷이나 렌더링/일러스트 이미지 (실물 사진만 가능)",
+                  "케이스 착용 상태 (케이스를 벗기고 촬영)",
+                  "화면이 켜진 상태 (배경화면이 보이면 상태 판단 불가)"
+                ]
+              },
+              analysis_guide: {
+                description: "사진을 받았을 때 아래 순서로 분석하세요",
+                step_1_validate: "먼저 실제 기기 사진인지 검증. 일러스트/렌더링/스크린샷/광고 이미지이면 '실제 기기 사진을 올려주세요'라고 안내하고 도구를 호출하지 마세요.",
+                step_2_assess: {
+                  screen_condition: {
+                    no_scratches: "스크래치 없이 깨끗한 화면",
+                    light_scratches: "빛에 비춰야 보이는 미세 생활 기스",
+                    visible_scratches: "육안으로 바로 보이는 긁힘/스크래치",
+                    cracked: "화면 깨짐, 금, 갈라짐"
+                  },
+                  body_condition: {
+                    pristine: "새것과 동일, 사용 흔적 없음",
+                    minor_wear: "미세한 사용 흔적 (경미한 생활 기스)",
+                    dents_scratches: "눈에 띄는 찍힘, 함몰, 스크래치",
+                    major_damage: "심한 파손, 큰 찍힘, 변형"
+                  },
+                  camera_condition: {
+                    clear: "깨끗한 렌즈, 이물질 없음",
+                    minor_smudge: "약간의 얼룩/먼지 (닦으면 제거 가능)",
+                    scratched: "렌즈에 스크래치",
+                    cracked: "렌즈 깨짐/금"
+                  }
+                },
+                step_3_rule: "애매한 경우 보수적으로 판단. 예: light_scratches와 visible_scratches 사이면 visible_scratches로 판정.",
+                step_4_call_tool: {
+                  care_plus_flow: "Care+ 상담 중 → check_care_plus_eligibility 호출",
+                  trade_in_flow: "Trade-in 상담 중 → analyze_tradein_device 호출 (appraisal_id 필요)"
+                }
               }
             },
             cross_sell_rules: [
@@ -258,22 +382,18 @@ function createSamsungServer(): McpServer {
   );
 
   // Tool 1: Get Galaxy Club Info
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "get_galaxy_club_info",
     {
       title: "Get Galaxy Club Info",
       description:
-        "Returns detailed information about New Galaxy Club subscription plans including pricing, benefits, device options, and terms. Use this when customers ask about Galaxy Club, Samsung device subscription, monthly device plans, or how to always have the latest Galaxy device.",
+        "Returns information about New 갤럭시 AI 구독클럽 subscription plans (12개월/24개월/36개월). Use this when customers ask about Galaxy Club, Samsung device subscription, 구독클럽, or upgrade programs.",
       inputSchema: {
         plan_type: z
-          .enum(["basic", "premium", "family", "all"])
+          .enum(["12mo", "24mo", "36mo", "all"])
           .optional()
-          .describe("Specific plan to get info about, or 'all' for comparison"),
-        device_interest: z
-          .string()
-          .optional()
-          .describe("Device the customer is interested in, to highlight relevant plans"),
+          .describe("Specific plan duration, or 'all' for comparison"),
         include_faq: z
           .boolean()
           .optional()
@@ -290,10 +410,10 @@ function createSamsungServer(): McpServer {
       },
     },
     async (args) => {
-      const { plan_type, device_interest, include_faq } = args;
+      const { plan_type, include_faq } = args;
 
       let filteredPlans = [...plansData.plans];
-      const faqs = include_faq !== false ? plansData.faq : [];
+      const faqs = include_faq !== false ? (plansData.faq as any[]).slice(0, 3) : [];
 
       // Filter by plan type
       if (plan_type && plan_type !== "all") {
@@ -301,51 +421,48 @@ function createSamsungServer(): McpServer {
         filteredPlans = filteredPlans.filter((p: any) => p.id === planIdPrefix);
       }
 
-      // Determine recommended plan based on device interest
-      let recommendedPlanId: string | null = null;
-      if (device_interest) {
-        const deviceLower = device_interest.toLowerCase();
-        const isPremiumDevice =
-          deviceLower.includes("ultra") ||
-          deviceLower.includes("fold") ||
-          deviceLower.includes("flip");
-        recommendedPlanId = isPremiumDevice ? "ngc-premium" : "ngc-basic";
-      }
-
       const plansSummary = filteredPlans
-        .map((p: any) => `**${p.name}**: $${p.monthly_price}/month - Upgrade every ${p.upgrade_cycle_months} months`)
+        .map((p: any) => {
+          const devices = (p.device_pricing || []).filter((d: any) => !d.closed);
+          const priceRange = devices.map((d: any) => d.monthly_price).filter(Boolean);
+          const minPrice = Math.min(...priceRange);
+          const maxPrice = Math.max(...priceRange);
+          const priceText = minPrice === maxPrice ? `${minPrice.toLocaleString()}원/월` : `${minPrice.toLocaleString()}~${maxPrice.toLocaleString()}원/월`;
+          return `**${p.name}**: ${priceText} × ${p.duration_months}회 | 잔존가 ${p.residual_value_pct}% 보장`;
+        })
         .join("\n");
 
       return {
         content: [
           {
             type: "text" as const,
-            text: `# ${plansData.service_name}\n\n${plansData.tagline}\n\n## Available Plans\n${plansSummary}`,
+            text: `# ${plansData.service_name}\n\n${plansData.description}\n\n## 플랜 안내\n${plansSummary}\n\n관심 있는 기기가 있으시면 일반 구매 대비 얼마나 절약되는지 비교해 드릴까요?`,
           },
         ],
         structuredContent: {
-          service_name: plansData.service_name,
-          tagline: plansData.tagline,
-          description: plansData.description,
+          service_name: (plansData as any).service_name,
+          tagline: (plansData as any).tagline,
+          description: (plansData as any).description,
           plans: filteredPlans.map((p: any) => ({
             ...p,
-            is_recommended: p.id === recommendedPlanId,
+            is_recommended: p.is_recommended || false,
           })),
           faq: faqs,
           enrollment_steps: (plansData.enrollment_steps as any[]).map((s: any) =>
             typeof s === "string" ? s : s.description ?? s.title
           ),
-          recommended_plan_id: recommendedPlanId,
           lifecycle_stages: (plansData as any).lifecycle?.stages || [],
-          regional_pricing: (plansData as any).regional_pricing || null,
-          available_regions: (plansData as any).available_regions || [],
+          residual_value_guarantee: (plansData as any).residual_value_guarantee || [],
+          policies: (plansData as any).policies || null,
+          contact: (plansData as any).contact || null,
+          official_url: (plansData as any).official_url || null,
         },
       };
     }
   );
 
   // Tool 3: Start Trade-in Appraisal
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "start_tradein_appraisal",
     {
@@ -353,48 +470,33 @@ function createSamsungServer(): McpServer {
       description:
         `Initiates a trade-in appraisal for a Samsung Galaxy device. Returns an initial value estimate.
 
-BEFORE calling this tool, you MUST collect the following information from the user through conversation:
+⚠️ IMPORTANT — 사용자에게 아래 2가지만 질문하세요. 절대 그 이상 묻지 마세요:
 
 1. **기기 모델명** — "어떤 기기를 보상판매하시려고요?" (예: Galaxy S23 Ultra, Galaxy Z Fold5)
-2. **저장 용량** — "저장 용량이 어떻게 되시나요?" (예: 128GB, 256GB, 512GB, 1TB)
-3. **전반적인 상태** — "기기의 전반적인 상태는 어떤가요?" 아래 중 하나를 선택하도록 안내:
-   - excellent: 새것과 거의 동일, 스크래치/파손 없음
-   - good: 정상 사용 흔적, 미세한 스크래치만 있음
-   - fair: 눈에 보이는 스크래치/찍힘, 약간의 사용감
-   - poor: 심한 파손, 화면 깨짐, 큰 찍힘
-4. **기능 문제** (선택) — "혹시 기능적으로 문제가 있나요?" 해당 항목 선택:
-   - battery_issue: 배터리 소모가 비정상적으로 빠름
-   - charging_issue: 충전 불량
-   - speaker_issue: 스피커/마이크 문제
-   - button_issue: 버튼 작동 불량
-   - connectivity_issue: Wi-Fi/블루투스 연결 문제
-5. **외관 문제** (선택) — "외관상 눈에 띄는 문제가 있나요?"
-   - screen_scratches: 화면 스크래치
-   - screen_cracks: 화면 깨짐
-   - back_scratches: 후면 스크래치
-   - back_cracks: 후면 깨짐
-   - dents: 찍힘/함몰
-   - discoloration: 변색
+2. **통신사** — "어느 통신사를 사용하고 계신가요?" (예: SKT, KT, LG U+, 자급제)
 
-모든 정보를 수집한 후 이 도구를 호출하세요. 초기 견적 제공 후, 사용자에게 "더 정확한 견적을 위해 기기의 앞면/뒷면 사진을 대화창에 업로드해 주세요"라고 안내하세요.`,
+이 2가지만 수집하면 즉시 이 도구를 호출하세요.
+저장 용량, 상태, 지역, 기능 문제, 외관 문제는 절대 사용자에게 묻지 마세요 — 모두 기본값이 자동 적용됩니다.
+초기 견적 제공 후, 사용자에게 "더 정확한 견적을 위해 기기의 앞면/뒷면 사진을 대화창에 업로드해 주세요"라고 안내하세요.`,
       inputSchema: {
         device_model: z.string().describe("기기 모델명 (예: 'Galaxy S23 Ultra', 'Galaxy Z Fold5')"),
-        storage_capacity: z.string().optional().describe("저장 용량 (예: '128GB', '256GB', '512GB', '1TB')"),
+        storage_capacity: z.string().optional().describe("[자동 적용 — 사용자에게 묻지 말 것] 저장 용량. 미입력 시 해당 기기의 첫 번째 용량 옵션 사용"),
         device_condition: z
           .enum(["excellent", "good", "fair", "poor"])
-          .describe("전반적 상태: excellent(새것 같음), good(미세 스크래치), fair(눈에 보이는 스크래치), poor(심한 파손)"),
+          .optional()
+          .describe("[자동 적용 — 사용자에게 묻지 말 것] 전반적 상태. 기본값: good"),
         functional_issues: z
           .array(z.string())
           .optional()
-          .describe("기능 문제 목록: battery_issue, charging_issue, speaker_issue, button_issue, connectivity_issue"),
+          .describe("[자동 적용 — 사용자에게 묻지 말 것] 기능 문제 목록. 기본값: 없음"),
         cosmetic_issues: z
           .array(z.string())
           .optional()
-          .describe("외관 문제 목록: screen_scratches, screen_cracks, back_scratches, back_cracks, dents, discoloration"),
+          .describe("[자동 적용 — 사용자에게 묻지 말 것] 외관 문제 목록. 기본값: 없음"),
         region: z
           .enum(["US", "KR", "UK", "DE", "JP", "SG"])
           .optional()
-          .describe("국가/지역: US(미국), KR(한국), UK(영국), DE(독일), JP(일본), SG(싱가포르)"),
+          .describe("[자동 적용 — 사용자에게 묻지 말 것] 국가/지역. 기본값: KR"),
         carrier: z
           .enum(["unlocked", "samsung_direct", "att", "verizon", "tmobile", "skt", "kt", "lgu", "docomo", "other_locked"])
           .optional()
@@ -414,10 +516,10 @@ BEFORE calling this tool, you MUST collect the following information from the us
       const {
         device_model,
         storage_capacity,
-        device_condition,
+        device_condition = "good",
         functional_issues = [],
         cosmetic_issues = [],
-        region = "US",
+        region = "KR",
         carrier = "unlocked",
       } = args;
 
@@ -517,7 +619,7 @@ BEFORE calling this tool, you MUST collect the following information from the us
         },
         created_at: now.toISOString(),
         valid_until: validUntil.toISOString(),
-        status: "pending_images",
+        status: "initial_estimate",
       };
 
       appraisalStore.set(appraisalId, appraisal);
@@ -528,7 +630,7 @@ BEFORE calling this tool, you MUST collect the following information from the us
         content: [
           {
             type: "text" as const,
-            text: `${device.model} (${storage}) 보상판매 견적이 시작되었습니다.\n\n**예상 보상가: $${finalValue}**\n\n상태: ${device_condition} - ${conditionDesc}\n\n이 견적은 7일간 유효합니다. 더 정확한 견적을 위해 기기 사진을 업로드해 주세요.`,
+            text: `${device.model} (${storage}) 보상판매 견적이 시작되었습니다.\n\n**예상 보상가: ${fmtPrice(finalValue, region)}**\n\n상태: ${device_condition} - ${conditionDesc}\n\n이 견적은 7일간 유효합니다. 더 정확한 견적을 위해 기기 사진을 업로드해 주세요.`,
           },
         ],
         structuredContent: {
@@ -539,109 +641,28 @@ BEFORE calling this tool, you MUST collect the following information from the us
           valuation: {
             ...appraisal.valuation,
             breakdown: {
-              base: `$${baseValue}`,
-              region: regionAdjustment !== 0 ? `${regionAdjustment >= 0 ? "+" : ""}$${regionAdjustment} (${regionData.label})` : null,
-              carrier: carrierAdjustment !== 0 ? `${carrierAdjustment >= 0 ? "+" : ""}$${carrierAdjustment} (${carrierData.label})` : null,
-              condition: `${conditionAdjustment >= 0 ? "+" : ""}$${conditionAdjustment}`,
-              issues: `${-issuesDeduction >= 0 ? "+" : ""}$${-issuesDeduction}`,
-              bonus: promotionalBonus > 0 ? `+$${promotionalBonus} (${promo.description})` : null,
-              total: `$${finalValue}`,
+              base: fmtPrice(baseValue, region),
+              region: regionAdjustment !== 0 ? `${fmtAdj(regionAdjustment, region)} (${regionData.label})` : null,
+              carrier: carrierAdjustment !== 0 ? `${fmtAdj(carrierAdjustment, region)} (${carrierData.label})` : null,
+              condition: fmtAdj(conditionAdjustment, region),
+              issues: fmtAdj(-issuesDeduction, region),
+              bonus: promotionalBonus > 0 ? `${fmtAdj(promotionalBonus, region)} (${promo.description})` : null,
+              total: fmtPrice(finalValue, region),
             },
           },
+          currency_info: getCurrencyInfo(region),
           region: appraisal.region,
           carrier: appraisal.carrier,
           valid_until: appraisal.valid_until,
-          status: "pending_images",
+          status: "initial_estimate",
           next_step: "기기 사진을 업로드하여 견적을 확정하세요",
         },
       };
     }
   );
 
-  // Tool 4: Submit Trade-in Images
-  registerAppTool(
-    server,
-    "submit_tradein_images",
-    {
-      title: "Submit Trade-in Images",
-      description:
-        "Submits device images for a trade-in appraisal. When user uploads device photos, use YOUR VISION capability to analyze the images first: identify the device model (e.g., Galaxy S24, S23 Ultra) and assess the condition (scratches, cracks, screen damage). Then call this tool with the analysis results. This allows accurate trade-in pricing based on actual device condition.",
-      inputSchema: {
-        appraisal_id: z.string().describe("The appraisal ID from start_tradein_appraisal"),
-        front_image: z.string().optional().describe("Photo of the device front/screen"),
-        back_image: z.string().optional().describe("Photo of the device back"),
-        screen_image: z.string().optional().describe("Photo of screen with display on (to check for burn-in/damage)"),
-        damage_image: z.string().optional().describe("Photo of any damage areas"),
-      },
-      annotations: {
-        readOnlyHint: false,
-        destructiveHint: false,
-        openWorldHint: false,
-      },
-      _meta: {
-        ui: { resourceUri: "ui://widget/tradein.html" },
-        "openai/outputTemplate": "ui://widget/tradein.html",
-      },
-    },
-    async (args) => {
-      const { appraisal_id, front_image, back_image, screen_image, damage_image } = args;
-
-      const appraisal = appraisalStore.get(appraisal_id);
-      if (!appraisal) {
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: `견적을 찾을 수 없습니다: ${appraisal_id}. 새로운 견적을 시작해 주세요.`,
-            },
-          ],
-          structuredContent: { error: "appraisal_not_found", appraisal_id },
-        };
-      }
-
-      // Collect submitted images
-      const images: Array<{ type: string; file_id: string }> = [];
-      if (front_image) images.push({ type: "front", file_id: front_image });
-      if (back_image) images.push({ type: "back", file_id: back_image });
-      if (screen_image) images.push({ type: "screen", file_id: screen_image });
-      if (damage_image) images.push({ type: "damage", file_id: damage_image });
-
-      appraisal.images = images;
-      const imageTypes = images.map((i) => i.type);
-      const hasAllRequiredImages = imageTypes.includes("front") && imageTypes.includes("back");
-
-      appraisal.status = hasAllRequiredImages ? "completed" : "processing";
-      appraisalStore.set(appraisal_id, appraisal);
-
-      const missingImages: string[] = [];
-      if (!front_image) missingImages.push("front");
-      if (!back_image) missingImages.push("back");
-
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: `견적 ${appraisal_id}에 ${images.length}장의 이미지를 수신했습니다.\n\n${
-              hasAllRequiredImages
-                ? "✓ 필수 이미지가 모두 수신되었습니다! 견적이 완료되었습니다."
-                : `⚠️ 필수 사진 누락: ${missingImages.join(", ")}. 견적 완료를 위해 업로드해 주세요.`
-            }`,
-          },
-        ],
-        structuredContent: {
-          appraisal_id,
-          images_received: images.length,
-          image_types: imageTypes,
-          missing_images: missingImages,
-          status: appraisal.status,
-          valuation: appraisal.valuation,
-        },
-      };
-    }
-  );
-
-  // Tool 5: Get Trade-in Result
-  registerAppTool(
+  // Tool 4: Get Trade-in Result
+  registerAppToolWithLogging(
     server,
     "get_tradein_result",
     {
@@ -694,7 +715,7 @@ BEFORE calling this tool, you MUST collect the following information from the us
         content: [
           {
             type: "text" as const,
-            text: `## 보상판매 견적 결과\n\n**기기:** ${appraisal.device.model} (${appraisal.device.storage})\n**상태:** ${appraisal.status}\n**최종 보상가: $${appraisal.valuation.final_value}**`,
+            text: `## 보상판매 견적 결과\n\n**기기:** ${appraisal.device.model} (${appraisal.device.storage})\n**상태:** ${appraisal.status}\n**최종 보상가: ${fmtPrice(appraisal.valuation.final_value, appraisal.region?.code || "US")}**`,
           },
         ],
         structuredContent: {
@@ -705,9 +726,10 @@ BEFORE calling this tool, you MUST collect the following information from the us
           valid_until: appraisal.valid_until,
           status: appraisal.status,
           next_steps: nextSteps,
+          currency_info: getCurrencyInfo(appraisal.region?.code || "US"),
           cta: {
-            text: appraisal.status === "completed" ? "보상판매 제안 수락" : "기기 사진 업로드",
-            action: appraisal.status === "completed" ? "accept_tradein" : "upload_images",
+            text: appraisal.status === "completed" ? "보상판매 제안 수락" : "정밀 견적 요청",
+            action: appraisal.status === "completed" ? "accept_tradein" : "request_vision",
           },
         },
       };
@@ -715,7 +737,7 @@ BEFORE calling this tool, you MUST collect the following information from the us
   );
 
   // Tool 6: Search Trade-in Value
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "search_tradein_value",
     {
@@ -863,19 +885,22 @@ BEFORE calling this tool, collect the following from the user:
 
       // Build text summary
       const summaryLines = results.map((r: any) => {
-        const vals = r.valuations.map((v: any) =>
-          `  - ${v.storage}: $${v.condition_range.poor}~$${v.condition_range.excellent}${v.local_value ? ` (${v.local_value})` : ""}`
-        ).join("\n");
+        const vals = r.valuations.map((v: any) => {
+          const low = v.local_value ? fmtPrice(v.condition_range.poor, region) : `$${v.condition_range.poor}`;
+          const high = v.local_value ? fmtPrice(v.condition_range.excellent, region) : `$${v.condition_range.excellent}`;
+          return `  - ${v.storage}: ${low}~${high}`;
+        }).join("\n");
         return `**${r.model}** (${r.release_year})\n${vals}`;
       });
 
       return {
         content: [{
           type: "text" as const,
-          text: `## 보상판매 가격 조회 결과\n\n지역: ${regionData.label} | 통신사: ${carrierData.label}\n\n${summaryLines.join("\n\n")}${promo ? `\n\n🎁 프로모션: ${promo.description} (+$${promo.amount})` : ""}`,
+          text: `## 보상판매 가격 조회 결과\n\n지역: ${regionData.label} | 통신사: ${carrierData.label}\n\n${summaryLines.join("\n\n")}${promo ? `\n\n🎁 프로모션: ${promo.description} (${fmtAdj(promo.amount, region)})` : ""}`,
         }],
         structuredContent: {
           results,
+          currency_info: getCurrencyInfo(region),
           search_params: {
             query,
             region: { code: region, label: regionData.label },
@@ -892,7 +917,7 @@ BEFORE calling this tool, collect the following from the user:
   // ============================================
 
   // Tool 7: Get Care+ Info (UC1)
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "get_care_plus_info",
     {
@@ -1023,6 +1048,7 @@ BEFORE calling this tool, collect the following from the user:
           enrollment_status: enrollmentStatus,
           enrollment_rules: carePlusData.enrollment_rules,
           device_pricing: devicePricing,
+          currency_rates: getAllCurrencyRates(),
           claim_process: (carePlusData as any).claim_process ?? null,
           service_centers: (carePlusData as any).service_centers ?? null,
           exclusions: (carePlusData as any).exclusions ?? null,
@@ -1034,7 +1060,7 @@ BEFORE calling this tool, collect the following from the user:
   );
 
   // Tool 8: Check Care+ Eligibility — Vision-based late enrollment (UC1)
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "check_care_plus_eligibility",
     {
@@ -1176,7 +1202,7 @@ STEP-BY-STEP:
   );
 
   // Tool 9: Compare Galaxy Club Cost (UC2)
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "compare_galaxy_club_cost",
     {
@@ -1184,8 +1210,8 @@ STEP-BY-STEP:
       description:
         "Compares Galaxy Club subscription cost vs outright purchase for a specific device. Shows monthly/annual cost breakdown, included benefits value, and savings. Use when customers want to compare whether Galaxy Club or buying outright is a better deal.",
       inputSchema: {
-        device_model: z.string().describe("Device to compare (e.g., 'Galaxy S25 Ultra')"),
-        plan_type: z.enum(["basic", "premium", "family"]).describe("Galaxy Club plan type"),
+        device_model: z.string().describe("Device to compare (e.g., 'Galaxy S26 Ultra')"),
+        plan_type: z.enum(["12mo", "24mo", "36mo"]).describe("Galaxy Club plan duration: 12mo, 24mo, or 36mo"),
         current_device_tradein: z.string().optional().describe("Current device for trade-in value calculation (e.g., 'Galaxy S23 Ultra')"),
       },
       annotations: {
@@ -1226,10 +1252,23 @@ STEP-BY-STEP:
           retailPrice = Object.values(msrpVals)[0] ?? retailPrice;
         }
       }
-      const monthlyCost = plan.monthly_price;
-      const totalPeriod = plan.upgrade_cycle_months ?? 12;
+      // Look up device-specific monthly price from plan's device_pricing
+      const devicePricing = (plan as any).device_pricing || [];
+      const matchedDevice = devicePricing.find((d: any) =>
+        modelLower.includes(d.model.toLowerCase().split(" ")[1] || "") || d.model.toLowerCase().includes(modelLower.split(" ").pop() || "")
+      ) || devicePricing.find((d: any) => d.flagship) || devicePricing[0];
+      const monthlyCost = matchedDevice?.monthly_price ?? 6900;
+      const totalPeriod = (plan as any).duration_months ?? 12;
       const totalCost = monthlyCost * totalPeriod;
-      const carePlusValueIncluded = costData?.care_plus_value_included ?? (plan_type === "premium" ? 215 : 144);
+      const residualPct = (plan as any).residual_value_pct ?? 50;
+
+      // Look up residual value guarantee from data
+      const rvgData = (plansData as any).residual_value_guarantee || [];
+      const rvgKey = totalPeriod === 12 ? "12mo" : totalPeriod === 24 ? "24mo" : "36mo";
+      const rvgMatch = rvgData.find((r: any) => modelLower.includes(r.model.toLowerCase().replace("galaxy ", "")));
+      const residualValue = rvgMatch ? rvgMatch[rvgKey] : Math.round(retailPrice * 1350 * residualPct / 100);
+
+      const carePlusValueIncluded = costData?.care_plus_value_included ?? 215;
 
       // Trade-in calculation
       let tradeinValue = 0;
@@ -1263,62 +1302,76 @@ STEP-BY-STEP:
         }
       }
 
-      const outrightTotal = retailPrice + carePlusValueIncluded - tradeinValue;
-      const savings = costData?.total_value_saved ?? (outrightTotal - totalCost);
+      // === 구독클럽은 기기 구매 + 부가 구독 상품 ===
+      // 비교 구조: "구독클럽 가입 시" vs "미가입 시" (기기 구매는 공통)
+      const krRate = ((devicesData as any).region_multipliers["KR"]?.base_rate) || 1350;
+      const devicePriceKRW = Math.round(retailPrice * krRate);
+      const carePlusAnnualKRW = Math.round(carePlusValueIncluded * krRate); // Care+ 별도 가입 시 연간 비용
 
-      // Benefits included in club
+      // 구독클럽 가입 시 비용 (monthlyCost는 이미 KRW)
+      const totalSubFee = totalCost; // 이용료 합계 (KRW)
+      const withClubTotal = devicePriceKRW + totalSubFee; // 기기값 + 이용료
+      const withClubAfterReturn = withClubTotal - residualValue; // 반납 후 실질 부담
+
+      // 미가입 시 비용
+      const withoutClubTotal = devicePriceKRW; // 기기값만 (Care+ 별도)
+      const withoutClubWithCare = devicePriceKRW + carePlusAnnualKRW; // Care+ 포함 시
+
+      // 구독클럽의 가치: Care+ 포함 + 잔존가 보장
+      const clubValue = residualValue + carePlusAnnualKRW; // 돌려받는 금액 + Care+ 절감
+      const netSubCost = totalSubFee - clubValue; // 이용료 - 혜택 가치
+
       const includedBenefits = plan.benefits.slice(0, 5);
-
-      // Lifecycle
       const lifecycleStages = (plansData as any).lifecycle?.stages || [];
 
-      const recommendation = savings > 0
-        ? `Galaxy Club ${plan.name}이 일반 구매 대비 $${savings} 절약됩니다. ${totalPeriod}개월마다 최신 기기로 업그레이드도 가능합니다.`
-        : `일반 구매가 $${Math.abs(savings)} 더 경제적입니다. 단, Galaxy Club은 업그레이드와 Care+ 포함 혜택이 있습니다.`;
-
-      const noteText = costData?.note ? `\n\n💡 ${costData.note}` : "";
+      const recommendation = netSubCost < 0
+        ? `구독클럽 ${plan.name} 가입 시 이용료 ${totalSubFee.toLocaleString()}원을 내지만, 잔존가 ${residualValue.toLocaleString()}원 + Care+ ${carePlusAnnualKRW.toLocaleString()}원 포함으로 실질적으로 ${Math.abs(netSubCost).toLocaleString()}원 이득입니다.`
+        : `구독클럽 ${plan.name} 가입 시 이용료 ${totalSubFee.toLocaleString()}원, 잔존가 보장 ${residualValue.toLocaleString()}원. 확정 보상가를 원하시면 유리합니다.`;
 
       return {
         content: [
           {
             type: "text" as const,
-            text: `## ${device_model} 비용 비교\n\n**Galaxy Club ${plan.name}:** $${monthlyCost}/월 × ${totalPeriod}개월 = $${totalCost}\n**일반 구매:** $${retailPrice}${tradeinValue ? ` - Trade-in $${tradeinValue} = $${retailPrice - tradeinValue}` : ""}\n\n**절약액: $${savings}**\n\n${recommendation}${noteText}`,
+            text: `## ${device_model} — 구독클럽 ${plan.name} 비용 분석\n\n**기기 구매가:** ${devicePriceKRW.toLocaleString()}원 (공통)\n\n**구독클럽 가입 시:**\n- 이용료: ${monthlyCost.toLocaleString()}원/월 × ${totalPeriod}회 = ${totalSubFee.toLocaleString()}원\n- Samsung Care+ ${totalPeriod <= 12 ? "1년" : totalPeriod <= 24 ? "2년" : "3년"}권 포함\n- 반납 시 잔존가 보장: ${residualValue.toLocaleString()}원 (기준가의 ${residualPct}%)\n\n**미가입 시:**\n- Care+ 별도 가입 시: ${carePlusAnnualKRW.toLocaleString()}원/년\n- 중고 판매가: 시세에 따라 변동 (보장 없음)\n\n${recommendation}`,
           },
         ],
         structuredContent: {
           device_model,
+          currency: "KRW",
           comparison: {
-            club: {
+            with_club: {
               plan_name: plan.name,
               plan_id: plan.id,
-              monthly_cost: monthlyCost,
+              device_price: devicePriceKRW,
+              monthly_fee: monthlyCost,
               total_months: totalPeriod,
-              total_cost: totalCost,
+              total_fee: totalSubFee,
               care_plus_included: true,
-              care_plus_value: carePlusValueIncluded,
-              upgrade_included: true,
-              net_cost: totalCost,
+              care_plus_value: carePlusAnnualKRW,
+              residual_value: residualValue,
+              residual_value_pct: residualPct,
+              total_spent: withClubTotal,
+              after_return: withClubAfterReturn,
               included_benefits: includedBenefits,
             },
-            outright: {
-              device_price: retailPrice,
-              care_plus_cost: carePlusValueIncluded,
-              tradein_credit: tradeinValue || null,
-              total_cost: outrightTotal,
+            without_club: {
+              device_price: devicePriceKRW,
+              care_plus_separate: carePlusAnnualKRW,
+              total_with_care: withoutClubWithCare,
+              resale_note: "중고 판매 시세에 따라 변동 (보장 없음)",
             },
           },
-          savings: savings > 0 ? savings : 0,
+          club_value: clubValue,
+          net_sub_cost: netSubCost,
           recommendation,
           lifecycle_stages: lifecycleStages,
-          included_benefits_value: carePlusValueIncluded,
-          tradein_info: tradeinInfo,
         },
       };
     }
   );
 
   // Tool 10: Analyze Trade-in Device — Vision-based re-appraisal (UC3)
-  registerAppTool(
+  registerAppToolWithLogging(
     server,
     "analyze_tradein_device",
     {
@@ -1390,19 +1443,33 @@ STEP-BY-STEP:
         ? criteria.camera_condition[vision_analysis.camera_condition] || "fair"
         : "good";
 
-      // Determine overall grade
+      // Determine overall grade — weighted by importance, constrained by worst component
       const gradeOrder = ["excellent", "good", "fair", "poor"];
       const grades = [screenGrade, bodyGrade, cameraGrade];
+      const weights = [0.5, 0.3, 0.2]; // screen, body, camera
+      const weightedIndex = grades.reduce((sum, g, i) => sum + gradeOrder.indexOf(g) * weights[i], 0);
       const worstIndex = Math.max(...grades.map(g => gradeOrder.indexOf(g)));
-      const avgIndex = Math.round(grades.reduce((sum, g) => sum + gradeOrder.indexOf(g), 0) / grades.length);
-      const overallGrade = gradeOrder[avgIndex];
+      const floorIndex = Math.max(0, worstIndex - 1); // worst grade minus 1 step max mitigation
+      const overallIndex = Math.min(gradeOrder.length - 1, Math.max(Math.round(weightedIndex), floorIndex));
+      const overallGrade = gradeOrder[overallIndex];
 
-      // Recalculate with new condition
+      // Recalculate with new condition — include region/carrier adjustments from original appraisal
       const conditionMultiplier = (devicesData.condition_multipliers as any)[overallGrade] || 0.65;
       const baseValue = appraisal.valuation.base_value;
+      const regionAdj = appraisal.valuation.region_adjustment || 0;
+      const carrierAdj = appraisal.valuation.carrier_adjustment || 0;
+      const regionAdjustedBase = baseValue + regionAdj;
       const conditionAdjustment = Math.round(baseValue * (conditionMultiplier - 1));
       const promotionalBonus = appraisal.valuation.promotional_bonus || 0;
-      const newFinalValue = Math.max(0, baseValue + conditionAdjustment + promotionalBonus);
+
+      // Safety check: if vision grade is worse than original, cap price at original value
+      const gradeIdx = (g: string) => ["excellent", "good", "fair", "poor"].indexOf(g);
+      const uncappedValue = Math.max(0, regionAdjustedBase + conditionAdjustment + carrierAdj + promotionalBonus);
+      const baselineCap = regionAdjustedBase + carrierAdj + promotionalBonus; // cannot exceed base + region + carrier + promo
+      const capValue = gradeIdx(overallGrade) > gradeIdx(appraisal.condition)
+        ? Math.min(originalValue, baselineCap)
+        : baselineCap;
+      const newFinalValue = Math.min(uncappedValue, capValue);
 
       // Update appraisal
       appraisal.vision_condition = overallGrade;
@@ -1413,16 +1480,17 @@ STEP-BY-STEP:
       appraisal.status = "completed";
       appraisalStore.set(appraisal_id, appraisal);
 
-      const diff = newFinalValue - originalValue;
-      const diffText = diff >= 0
-        ? `보상판매 가격이 $${originalValue}에서 **$${newFinalValue}**로 $${diff} 상향 조정되었습니다.`
-        : `보상판매 가격이 $${originalValue}에서 **$${newFinalValue}**로 $${Math.abs(diff)} 하향 조정되었습니다.`;
+      // Calculate price range (±10% around the estimated value)
+      const regionCode = appraisal.region?.code || "KR";
+      const priceLow = Math.round(newFinalValue * 0.9);
+      const priceHigh = Math.round(newFinalValue * 1.1);
+      const disclaimer = "본 견적은 사진 기반 AI 분석에 의한 예상 범위이며, 정확한 보상판매 가격은 전문 업체의 기기 수거 및 정밀 분석 후 확정됩니다.";
 
       return {
         content: [
           {
             type: "text" as const,
-            text: `## Vision 기반 재산정 결과\n\n**기기:** ${appraisal.device.model}\n**화면:** ${vision_analysis.screen_condition} (${screenGrade})\n**외관:** ${vision_analysis.body_condition} (${bodyGrade})\n**카메라:** ${vision_analysis.camera_condition ?? "N/A"} (${cameraGrade})\n**종합 상태:** ${overallGrade}\n\n${diffText}`,
+            text: `## Vision 기반 재산정 결과\n\n**기기:** ${appraisal.device.model}\n**화면:** ${vision_analysis.screen_condition} (${screenGrade})\n**외관:** ${vision_analysis.body_condition} (${bodyGrade})\n**카메라:** ${vision_analysis.camera_condition ?? "N/A"} (${cameraGrade})\n**종합 상태:** ${overallGrade}\n\n**예상 보상가 범위: ${fmtPrice(priceLow, regionCode)} ~ ${fmtPrice(priceHigh, regionCode)}**\n\n⚠️ ${disclaimer}`,
           },
         ],
         structuredContent: {
@@ -1433,13 +1501,18 @@ STEP-BY-STEP:
           valuation: {
             ...appraisal.valuation,
             breakdown: {
-              base: `$${baseValue}`,
-              condition: `${conditionAdjustment >= 0 ? "+" : ""}$${conditionAdjustment}`,
-              issues: `$0`,
-              bonus: promotionalBonus > 0 ? `+$${promotionalBonus}` : null,
-              total: `$${newFinalValue}`,
+              base: fmtPrice(baseValue, regionCode),
+              region: regionAdj !== 0 ? fmtAdj(regionAdj, regionCode) : null,
+              carrier: carrierAdj !== 0 ? fmtAdj(carrierAdj, regionCode) : null,
+              condition: fmtAdj(conditionAdjustment, regionCode),
+              issues: fmtPrice(0, regionCode),
+              bonus: promotionalBonus > 0 ? fmtAdj(promotionalBonus, regionCode) : null,
+              total: fmtPrice(newFinalValue, regionCode),
             },
           },
+          currency_info: getCurrencyInfo(regionCode),
+          region: appraisal.region ?? null,
+          carrier: appraisal.carrier ?? null,
           valid_until: appraisal.valid_until,
           status: "completed",
           vision_conditions: {
@@ -1450,19 +1523,20 @@ STEP-BY-STEP:
           vision_analysis_result: {
             original_value: originalValue,
             new_value: newFinalValue,
-            difference: diff,
+            price_range: { low: priceLow, high: priceHigh },
             overall_grade: overallGrade,
             screen_grade: screenGrade,
             body_grade: bodyGrade,
             camera_grade: cameraGrade,
           },
+          disclaimer,
           next_steps: [
-            "Accept the trade-in offer",
-            "Ship your device using the free prepaid label",
-            "Receive your credit within 3-5 business days",
+            "보상판매 제안을 수락하세요",
+            "무료 선불 라벨로 기기를 발송하세요",
+            "3~5 영업일 내 크레딧을 받으세요",
           ],
           cta: {
-            text: "Accept Trade-in Offer",
+            text: "보상판매 제안 수락",
             action: "accept_tradein",
           },
         },
@@ -1551,7 +1625,6 @@ httpServer.listen(port, () => {
 ║  • get_care_plus_info        - Samsung Care+ insurance       ║
 ║  • check_care_plus_eligibility - Care+ late enrollment       ║
 ║  • start_tradein_appraisal   - Start trade-in appraisal      ║
-║  • submit_tradein_images     - Submit device images          ║
 ║  • analyze_tradein_device    - Vision-based re-appraisal     ║
 ║  • get_tradein_result        - Get appraisal result          ║
 ║  • search_tradein_value       - Search trade-in value         ║

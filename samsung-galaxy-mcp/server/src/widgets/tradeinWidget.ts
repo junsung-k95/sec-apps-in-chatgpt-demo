@@ -350,23 +350,6 @@ export function getTradeinWidgetHtml(): string {
     .breakdown-row .positive { color: var(--success-green); }
     .breakdown-row .negative { color: #ef4444; }
 
-    /* ===== Photo Hint ===== */
-    .photo-hint {
-      margin: 16px 0;
-      padding: 14px 16px;
-      background: var(--samsung-blue-light);
-      border-radius: 10px;
-      font-size: 13px;
-      color: var(--samsung-blue);
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .photo-hint .hint-icon { font-size: 20px; }
-
     /* ===== Next Steps ===== */
     .next-steps { margin: 16px 0; }
     .next-steps-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
@@ -559,6 +542,50 @@ export function getTradeinWidgetHtml(): string {
     .search-button:hover { background: #0d1f7a; }
     .search-button:disabled { background: #9ca3af; cursor: not-allowed; }
 
+    /* ===== Price Range ===== */
+    .price-range-section {
+      text-align: center;
+      padding: 20px 16px;
+      margin: 16px 0;
+      background: var(--success-green-light);
+      border-radius: 10px;
+    }
+
+    .price-range-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .price-range-values {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--success-green);
+      animation: countUp 0.4s ease-out;
+    }
+
+    .price-range-sep {
+      font-size: 24px;
+      color: var(--text-secondary);
+      margin: 0 4px;
+    }
+
+    /* ===== Disclaimer ===== */
+    .disclaimer {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      background: var(--warning-orange-light);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .disclaimer-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
     .search-loading {
       text-align: center;
       padding: 20px;
@@ -674,6 +701,14 @@ export function getTradeinWidgetHtml(): string {
       return value.toLocaleString();
     }
 
+    function fmtP(usdValue) {
+      const ci = currentData?.currency_info;
+      if (!ci || ci.region_code === 'US' || !ci.base_rate) return '$' + formatPrice(usdValue);
+      const local = Math.round(usdValue * ci.base_rate);
+      if (ci.region_code === 'KR') return formatPrice(local) + '원';
+      return ci.symbol + formatPrice(local);
+    }
+
     // ===== Search Results View (Interactive Form) =====
     function renderSearchResults(data) {
       currentData = data;
@@ -706,14 +741,11 @@ export function getTradeinWidgetHtml(): string {
       // Condition range bar
       const rangeHtml = ['excellent', 'good', 'fair', 'poor'].map(c => {
         const val = condRange[c] || 0;
-        return '<div class="range-item ' + (c === selectedCondition ? 'active' : '') + '"><div class="range-bar ' + c + '"></div><div class="range-label">' + getConditionLabel(c) + '</div><div class="range-value">$' + formatPrice(val) + '</div></div>';
+        return '<div class="range-item ' + (c === selectedCondition ? 'active' : '') + '"><div class="range-bar ' + c + '"></div><div class="range-label">' + getConditionLabel(c) + '</div><div class="range-value">' + fmtP(val) + '</div></div>';
       }).join('');
 
-      // Local currency
-      const localHtml = currentVal.local_currency ? '<div class="price-local">' + currentVal.local_currency + '</div>' : '';
-
       // Promo banner
-      const promoHtml = data.promotional_bonus ? '<div class="promo-banner"><span class="promo-icon">🎁</span><span>현재 <span class="promo-amount">+$' + data.promotional_bonus.amount + '</span> ' + data.promotional_bonus.description + ' 적용 중 (~' + data.promotional_bonus.valid_until + ')</span></div>' : '';
+      const promoHtml = data.promotional_bonus ? '<div class="promo-banner"><span class="promo-icon">🎁</span><span>현재 <span class="promo-amount">+' + fmtP(data.promotional_bonus.amount) + '</span> ' + data.promotional_bonus.description + ' 적용 중 (~' + data.promotional_bonus.valid_until + ')</span></div>' : '';
 
       content.innerHTML =
         '<div class="card">' +
@@ -738,8 +770,7 @@ export function getTradeinWidgetHtml(): string {
           '</div>' +
           '<div class="price-section">' +
             '<div class="price-label">예상 보상판매 가격</div>' +
-            '<div class="price-amount" key="' + currentPrice + '">$' + formatPrice(currentPrice) + '</div>' +
-            localHtml +
+            '<div class="price-amount" key="' + currentPrice + '">' + fmtP(currentPrice) + '</div>' +
           '</div>' +
           '<div class="condition-range">' + rangeHtml + '</div>' +
           '<div class="cta-container">' +
@@ -792,22 +823,40 @@ export function getTradeinWidgetHtml(): string {
 
       const valuation = data.valuation || {};
       const breakdown = valuation.breakdown || {};
-      const status = data.status || 'pending_images';
+      const status = data.status || 'initial_estimate';
       const device = data.device || {};
 
-      // Before/After
+      // Before/After — show price range if available
       let beforeAfterHtml = '';
       if (data.vision_analysis_result) {
         const va = data.vision_analysis_result;
-        const diff = va.new_value - va.original_value;
-        const diffSign = diff >= 0 ? '+' : '';
-        beforeAfterHtml =
-          '<div class="before-after">' +
-            '<div class="ba-col"><div class="ba-label">기존 견적</div><div class="ba-value before">$' + formatPrice(va.original_value) + '</div></div>' +
-            '<div class="ba-arrow">→</div>' +
-            '<div class="ba-col"><div class="ba-label">사진 기반 견적</div><div class="ba-value after">$' + formatPrice(va.new_value) + '</div></div>' +
-          '</div>' +
-          '<div style="text-align:center"><span class="ba-diff ' + (diff >= 0 ? 'positive' : 'negative') + '">' + diffSign + '$' + Math.abs(diff) + ' ' + (diff >= 0 ? '상향 조정' : '하향 조정') + '</span></div>';
+        if (va.price_range) {
+          beforeAfterHtml =
+            '<div class="price-range-section">' +
+              '<div class="price-range-label">사진 기반 예상 보상가 범위</div>' +
+              '<div class="price-range-values">' +
+                '<span class="price-range-low">' + fmtP(va.price_range.low) + '</span>' +
+                '<span class="price-range-sep"> ~ </span>' +
+                '<span class="price-range-high">' + fmtP(va.price_range.high) + '</span>' +
+              '</div>' +
+            '</div>';
+        } else {
+          const diff = va.new_value - va.original_value;
+          const diffSign = diff >= 0 ? '+' : '';
+          beforeAfterHtml =
+            '<div class="before-after">' +
+              '<div class="ba-col"><div class="ba-label">기존 견적</div><div class="ba-value before">' + fmtP(va.original_value) + '</div></div>' +
+              '<div class="ba-arrow">→</div>' +
+              '<div class="ba-col"><div class="ba-label">사진 기반 견적</div><div class="ba-value after">' + fmtP(va.new_value) + '</div></div>' +
+            '</div>' +
+            '<div style="text-align:center"><span class="ba-diff ' + (diff >= 0 ? 'positive' : 'negative') + '">' + diffSign + fmtP(Math.abs(diff)) + ' ' + (diff >= 0 ? '상향 조정' : '하향 조정') + '</span></div>';
+        }
+      }
+
+      // Disclaimer
+      let disclaimerHtml = '';
+      if (data.disclaimer) {
+        disclaimerHtml = '<div class="disclaimer"><span class="disclaimer-icon">⚠️</span><span>' + data.disclaimer + '</span></div>';
       }
 
       // Vision conditions
@@ -837,11 +886,6 @@ export function getTradeinWidgetHtml(): string {
           '<div class="breakdown-row"><span>최종 가격</span><span>' + breakdown.total + '</span></div></div>';
       }
 
-      // Photo hint
-      const photoHintHtml = status !== 'completed' && !data.vision_analysis_result
-        ? '<div class="photo-hint"><span class="hint-icon">📸</span><span>대화창에 기기 사진(앞면/뒷면)을 업로드하면 AI가 상태를 분석하여 정확한 견적을 제공합니다.</span></div>'
-        : '';
-
       // Next steps
       let nextStepsHtml = '';
       if (data.next_steps) {
@@ -856,39 +900,32 @@ export function getTradeinWidgetHtml(): string {
           '<div class="device-info"><div class="device-icon">' + getDeviceIcon('smartphone') + '</div><div><div class="model">' + (device.model || '알 수 없는 기기') + '</div><div class="details">' + (device.storage || '') + ' • ' + (data.condition ? getConditionLabel(data.condition) : '') + ' 상태</div></div></div>' +
           beforeAfterHtml +
           conditionHtml +
-          '<div class="price-section"><div class="price-label">예상 보상판매 가격</div><div class="price-amount">$' + formatPrice(valuation.final_value || 0) + '</div><div class="price-validity">유효기간: ' + (data.valid_until ? new Date(data.valid_until).toLocaleDateString('ko-KR') : '없음') + '</div></div>' +
+          disclaimerHtml +
+          '<div class="price-section"><div class="price-label">예상 보상판매 가격</div><div class="price-amount">' + fmtP(valuation.final_value || 0) + '</div><div class="price-validity">유효기간: ' + (data.valid_until ? new Date(data.valid_until).toLocaleDateString('ko-KR') : '없음') + '</div></div>' +
           breakdownHtml +
-          photoHintHtml +
           nextStepsHtml +
           '<div class="cta-container">' +
-            '<button class="cta-button primary" onclick="handleCTA()">' + (data.cta?.text || (status === 'completed' || data.vision_analysis_result ? '견적 수락하기' : '사진 업로드')) + '</button>' +
+            '<button class="cta-button primary" onclick="handleCTA()">' + (data.cta?.text || '견적 수락하기') + '</button>' +
             (data.vision_analysis_result || status === 'completed' ? '<button class="cta-button secondary" onclick="crossSellClub()">Galaxy Club에 적용</button>' : '') +
           '</div>' +
         '</div>';
     }
 
     function handleCTA() {
-      const action = currentData?.cta?.action || 'accept_tradein';
       const appraisalId = currentData?.appraisal_id;
+      if (!appraisalId) return;
 
-      if ((action === 'accept_tradein' || currentData?.vision_analysis_result) && appraisalId) {
-        const finalValue = currentData?.valuation?.final_value || currentData?.vision_analysis_result?.new_value || 0;
-        const ctaContainer = document.querySelector('.cta-container');
-        if (ctaContainer) {
-          ctaContainer.innerHTML =
-            '<div class="confirm-overlay">' +
-              '<div class="confirm-text">$' + formatPrice(finalValue) + '에 수락하시겠습니까?</div>' +
-              '<div class="confirm-buttons">' +
-                '<button class="btn-cancel" onclick="cancelAccept()">취소</button>' +
-                '<button class="btn-confirm" onclick="confirmAccept()">수락</button>' +
-              '</div>' +
-            '</div>';
-        }
-      } else {
-        window.parent.postMessage({
-          jsonrpc: '2.0', method: 'ui/message',
-          params: { role: 'user', content: [{ type: 'text', text: '기기 사진을 업로드하여 정확한 견적을 받고 싶습니다.' }] }
-        }, '*');
+      const finalValue = currentData?.valuation?.final_value || currentData?.vision_analysis_result?.new_value || 0;
+      const ctaContainer = document.querySelector('.cta-container');
+      if (ctaContainer) {
+        ctaContainer.innerHTML =
+          '<div class="confirm-overlay">' +
+            '<div class="confirm-text">' + fmtP(finalValue) + '에 수락하시겠습니까?</div>' +
+            '<div class="confirm-buttons">' +
+              '<button class="btn-cancel" onclick="cancelAccept()">취소</button>' +
+              '<button class="btn-confirm" onclick="confirmAccept()">수락</button>' +
+            '</div>' +
+          '</div>';
       }
     }
 
@@ -896,7 +933,7 @@ export function getTradeinWidgetHtml(): string {
       const appraisalId = currentData?.appraisal_id;
       window.parent.postMessage({
         jsonrpc: '2.0', method: 'ui/message',
-        params: { role: 'user', content: [{ type: 'text', text: '견적 ' + appraisalId + '의 보상판매 제안을 수락하겠습니다.' }] }
+        params: { role: 'user', content: [{ type: 'text', text: '견적 ' + appraisalId + '의 보상판매 제안을 수락하겠습니다. Trade-in 페이지: https://www.samsung.com/sec/trade-in/' }] }
       }, '*');
     }
 

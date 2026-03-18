@@ -444,6 +444,24 @@ export function getCarePlusWidgetHtml(): string {
     let selectedPlanId = null;
     let currentCarePlusData = null;
 
+    function detectRegion() {
+      const lang = navigator.language || '';
+      if (lang.startsWith('ko')) return 'KR';
+      if (lang.startsWith('ja')) return 'JP';
+      if (lang === 'en-GB') return 'UK';
+      if (lang.startsWith('de')) return 'DE';
+      return null;
+    }
+
+    function fmtCarePlusPrice(usdValue) {
+      const region = detectRegion();
+      const rates = currentCarePlusData?.currency_rates;
+      if (!region || !rates || !rates[region] || !rates[region].base_rate) return '$' + usdValue;
+      const local = Math.round(usdValue * rates[region].base_rate);
+      if (region === 'KR') return local.toLocaleString() + '원';
+      return (rates[region].symbol || '') + local.toLocaleString();
+    }
+
     // Restore selected plan from saved widget state
     const savedState = window.openai?.widgetState;
     if (savedState?.selectedPlan) {
@@ -496,14 +514,14 @@ export function getCarePlusWidgetHtml(): string {
             <div class="plan-col \${isRecommended ? 'recommended' : ''} \${selectedPlanId === plan.id ? 'selected' : ''}" onclick="selectCarePlan('\${plan.id}')" style="cursor:pointer">
               \${isRecommended ? '<span class="plan-badge">추천</span>' : ''}
               <div class="plan-name">\${plan.name}</div>
-              <div class="plan-price">$\${plan.monthly_price}<span>/월</span></div>
+              <div class="plan-price">\${fmtCarePlusPrice(plan.monthly_price)}<span>/월</span></div>
               <ul class="coverage-list">
                 \${(plan.coverage || []).map(c => '<li>' + c + '</li>').join('')}
               </ul>
               <div class="deductible-label">자기부담금</div>
-              \${deductible.screen_repair !== undefined ? '<div class="deductible-row"><span>화면 수리</span><span>$' + deductible.screen_repair + '</span></div>' : ''}
-              \${deductible.other_repair !== undefined ? '<div class="deductible-row"><span>기타 수리</span><span>$' + deductible.other_repair + '</span></div>' : ''}
-              \${deductible.replacement !== undefined ? '<div class="deductible-row"><span>교체</span><span>$' + deductible.replacement + '</span></div>' : ''}
+              \${deductible.screen_repair !== undefined ? '<div class="deductible-row"><span>화면 수리</span><span>' + fmtCarePlusPrice(deductible.screen_repair) + '</span></div>' : ''}
+              \${deductible.other_repair !== undefined ? '<div class="deductible-row"><span>기타 수리</span><span>' + fmtCarePlusPrice(deductible.other_repair) + '</span></div>' : ''}
+              \${deductible.replacement !== undefined ? '<div class="deductible-row"><span>교체</span><span>' + fmtCarePlusPrice(deductible.replacement) + '</span></div>' : ''}
             </div>
           \`;
         }).join('') + '</div>';
@@ -554,8 +572,9 @@ export function getCarePlusWidgetHtml(): string {
         \`;
       }
 
-      // FAQ
-      const faqs = data.faq || [];
+      // FAQ — 최대 3개만 표시
+      const allFaqs = data.faq || [];
+      const faqs = allFaqs.slice(0, 3);
       let faqHtml = '';
       if (faqs.length > 0) {
         faqHtml = \`
@@ -567,6 +586,7 @@ export function getCarePlusWidgetHtml(): string {
                 <div class="faq-answer">\${faq.answer}</div>
               </div>
             \`).join('')}
+            \${allFaqs.length > 3 ? '<div style="text-align:center;padding:8px;font-size:12px;color:var(--text-secondary)">더 많은 질문이 있으시면 채팅으로 물어보세요</div>' : ''}
           </div>
         \`;
       }
@@ -582,14 +602,22 @@ export function getCarePlusWidgetHtml(): string {
           ctaHtml += '<button class="cta-button primary" style="opacity:0.6" disabled>플랜을 선택해주세요</button>';
         }
       } else if (data.enrollment_status?.status === 'eligible_late_enrollment') {
-        ctaHtml += '<button class="cta-button primary" onclick="requestVisionCheck()">기기 사진 업로드하기</button>';
+        if (selectedPlanId) {
+          const selectedPlan = plans.find(p => p.id === selectedPlanId);
+          const planLabel = selectedPlan ? selectedPlan.name : 'Care+';
+          ctaHtml += '<button class="cta-button primary" onclick="enrollCarePlus(\\'' + selectedPlanId + '\\')">' + planLabel + ' 가입 상담하기</button>';
+        } else {
+          ctaHtml += '<button class="cta-button primary" style="opacity:0.6" disabled>플랜을 선택해주세요</button>';
+        }
+      } else if (data.eligibility_result && !data.eligibility_result.eligible) {
+        ctaHtml += '<button class="cta-button primary" onclick="openCustomerCenter()">고객센터에 상세 문의하기</button>';
       } else {
         if (selectedPlanId) {
           const selectedPlan = plans.find(p => p.id === selectedPlanId);
           const planLabel = selectedPlan ? selectedPlan.name : 'Care+';
           ctaHtml += '<button class="cta-button primary" onclick="enrollCarePlus(\\'' + selectedPlanId + '\\')">' + planLabel + ' 가입하기</button>';
         } else {
-          ctaHtml += '<button class="cta-button primary" onclick="showDetails()">플랜 비교 상세</button>';
+          ctaHtml += '<button class="cta-button primary" onclick="openCustomerCenter()">고객센터에 상세 문의하기</button>';
         }
       }
       ctaHtml += '</div>';
@@ -638,31 +666,14 @@ export function getCarePlusWidgetHtml(): string {
         method: 'ui/message',
         params: {
           role: 'user',
-          content: [{ type: 'text', text: planName + '으로 가입할게요.' }]
+          content: [{ type: 'text', text: planName + '으로 가입할게요. 가입 페이지: https://www.samsung.com/sec/care-plus/' }]
         }
       }, '*');
     }
 
-    function requestVisionCheck() {
-      window.parent.postMessage({
-        jsonrpc: '2.0',
-        method: 'ui/message',
-        params: {
-          role: 'user',
-          content: [{ type: 'text', text: '기기 상태를 확인하기 위해 사진을 업로드하겠습니다.' }]
-        }
-      }, '*');
-    }
 
-    function showDetails() {
-      window.parent.postMessage({
-        jsonrpc: '2.0',
-        method: 'ui/message',
-        params: {
-          role: 'user',
-          content: [{ type: 'text', text: 'Care+ Basic과 Premium 차이를 자세히 알려주세요.' }]
-        }
-      }, '*');
+    function openCustomerCenter() {
+      window.open('https://www.samsung.com', '_blank');
     }
 
     // Listen for tool results
