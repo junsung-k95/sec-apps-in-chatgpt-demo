@@ -307,16 +307,12 @@ function createSamsungServer(): McpServer {
                 required_info_for_appraisal: {
                   must_collect_before_calling: "start_tradein_appraisal",
                   items: [
-                    "기기 모델명 — '어떤 기기를 보상판매하시려고요?'",
-                    "저장 용량 — '저장 용량이 어떻게 되나요? (예: 256GB)'",
-                    "국가/지역 — '어느 나라에서 구매하신 기기인가요?'",
-                    "통신사 — '자급제(언락)인가요, 통신사 약정 기기인가요?'",
-                    "전반적 상태 — '기기의 전반적인 상태는 어떤가요? (새것 같음 / 미세 스크래치 / 눈에 띄는 스크래치 / 심한 파손)'",
-                    "기능 문제 유무 — '배터리, 충전, 스피커 등 기능 문제가 있나요?'",
-                    "외관 문제 유무 — '화면 깨짐, 찍힘 등 외관 문제가 있나요?'"
+                    "기기 모델명 — '어떤 기기를 보상판매하시려고요?' (예: Galaxy S23 Ultra, Galaxy Z Fold5)",
+                    "통신사 — '어느 통신사를 사용하고 계신가요?' (예: SKT, KT, LG U+, 자급제)"
                   ],
+                  do_not_ask: "저장 용량, 국가/지역, 상태, 기능 문제, 외관 문제는 절대 묻지 마세요. 모두 기본값이 자동 적용됩니다.",
                 },
-                conversation_example: "사용자: 'S23 Ultra 보상판매 얼마?' → 국가/통신사 물어보기 → search_tradein_value 호출 → 정식 견적 원하면 나머지 정보 수집 후 start_tradein_appraisal"
+                conversation_example: "사용자: 'S23 Ultra 보상판매 얼마?' → 통신사 물어보기 → start_tradein_appraisal 호출 → 초기 견적 후 사진 업로드 안내"
               }
             },
             vision_photo_guide: {
