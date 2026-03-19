@@ -19,8 +19,8 @@ import { getTradeinWidgetHtml } from "./widgets/tradeinWidget.js";
 import { getCarePlusWidgetHtml } from "./widgets/carePlusWidget.js";
 import { getComparisonWidgetHtml } from "./widgets/comparisonWidget.js";
 
-// Widget CSP configuration
-const WIDGET_DOMAIN = "https://deflagrable-slackingly-geralyn.ngrok-free.dev";
+// Widget CSP configuration — set WIDGET_DOMAIN env var for production
+const WIDGET_DOMAIN = process.env.WIDGET_DOMAIN || "https://deflagrable-slackingly-geralyn.ngrok-free.dev";
 const WIDGET_CSP = {
   connectDomains: [WIDGET_DOMAIN],
   resourceDomains: [WIDGET_DOMAIN, "https://*.oaistatic.com"],
